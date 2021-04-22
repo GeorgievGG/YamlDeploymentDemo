@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YamlDeploymentAPI", "YamlDeploymentAPI\YamlDeploymentAPI.csproj", "{B14B2833-1C3D-42A6-8AEE-8485214FA6E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YamlDeploymentFunctions", "YamlDeploymentFunctions\YamlDeploymentFunctions.csproj", "{8D9A8FDF-EF2B-447E-B637-5E0DD966D409}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "YamlDeploymentDB", "YamlDeploymentDB\YamlDeploymentDB.sqlproj", "{A3564A1C-5570-4F3D-BB26-236B500CCEA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YamlDeploymentInfrastructure", "YamlDeploymentInfrastructure\YamlDeploymentInfrastructure.csproj", "{CB1469F2-8F7C-4859-B676-75EF6D8710BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YamlDeploymentDomain", "YamlDeploymentDomain\YamlDeploymentDomain.csproj", "{A5876463-FF17-47D5-9F67-14E31C224C0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YamlDeploymentWeb", "YamlDeploymentWeb\YamlDeploymentWeb.csproj", "{29455D19-8E21-4DCB-B80B-97FB54FB4E90}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B14B2833-1C3D-42A6-8AEE-8485214FA6E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B14B2833-1C3D-42A6-8AEE-8485214FA6E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B14B2833-1C3D-42A6-8AEE-8485214FA6E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B14B2833-1C3D-42A6-8AEE-8485214FA6E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D9A8FDF-EF2B-447E-B637-5E0DD966D409}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D9A8FDF-EF2B-447E-B637-5E0DD966D409}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D9A8FDF-EF2B-447E-B637-5E0DD966D409}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D9A8FDF-EF2B-447E-B637-5E0DD966D409}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3564A1C-5570-4F3D-BB26-236B500CCEA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3564A1C-5570-4F3D-BB26-236B500CCEA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3564A1C-5570-4F3D-BB26-236B500CCEA7}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A3564A1C-5570-4F3D-BB26-236B500CCEA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3564A1C-5570-4F3D-BB26-236B500CCEA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3564A1C-5570-4F3D-BB26-236B500CCEA7}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{CB1469F2-8F7C-4859-B676-75EF6D8710BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB1469F2-8F7C-4859-B676-75EF6D8710BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB1469F2-8F7C-4859-B676-75EF6D8710BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB1469F2-8F7C-4859-B676-75EF6D8710BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5876463-FF17-47D5-9F67-14E31C224C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5876463-FF17-47D5-9F67-14E31C224C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5876463-FF17-47D5-9F67-14E31C224C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5876463-FF17-47D5-9F67-14E31C224C0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29455D19-8E21-4DCB-B80B-97FB54FB4E90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29455D19-8E21-4DCB-B80B-97FB54FB4E90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29455D19-8E21-4DCB-B80B-97FB54FB4E90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29455D19-8E21-4DCB-B80B-97FB54FB4E90}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A062A0F2-5EB6-4C2C-98CC-6419CEA0B225}
+	EndGlobalSection
+EndGlobal

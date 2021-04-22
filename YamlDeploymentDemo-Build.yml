@@ -1,0 +1,106 @@
+trigger:
+    branches:
+      include:
+        - master
+    paths:
+      exclude:
+        - deploy/*
+
+variables:
+  buildPlatform: "Any CPU"
+  buildConfiguration: "release"
+  buildVmImage: "windows-latest"
+  majorVersion: 1
+  minorVersion: 0
+  patchVersion: 0
+
+name: YamlDeploymentDemo-Build_$(majorVersion).$(minorVersion).$(patchVersion).$(build.BuildID)
+
+stages:
+  - stage: Build
+    jobs:
+      - job: Build_AdvancedDistributionSystem
+        pool:
+          vmImage: "windows-latest"
+
+        steps:
+          - task: NuGetCommand@2
+            displayName: 'NuGet restore'
+            inputs:
+              command: "restore"
+              projects: "source/YamlDeploymentDemo.sln"
+              feedsToUse: "config"
+              nugetConfigPath: "nuget.config"
+
+          - task: VSBuild@1
+            displayName: 'Build Solution'
+            inputs:
+              solution: source/YamlDeploymentDemo.sln
+              msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\tmp"'
+              platform: '$(BuildPlatform)'
+              configuration: '$(BuildConfiguration)'
+
+          - task: CopyFiles@2
+            displayName: 'Copy database'
+            inputs:
+              SourceFolder: '$(build.sourcesdirectory)'
+              Contents: 'source\YamlDeploymentDB\**\*.dacpac'
+              TargetFolder: '$(build.artifactstagingdirectory)\database'
+              OverWrite: true
+              flattenFolders: true
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
+          - task: CopyFiles@2
+            displayName: 'Copy API files'
+            inputs:
+              SourceFolder: '$(build.artifactstagingdirectory)\tmp'
+              Contents: YamlDeploymentAPI.*
+              TargetFolder: '$(build.artifactstagingdirectory)\api'
+              CleanTargetFolder: true
+              OverWrite: true
+
+          - task: CopyFiles@2
+            displayName: 'Copy Website files'
+            inputs:
+              SourceFolder: '$(build.artifactstagingdirectory)\tmp'
+              Contents: YamlDeploymentWeb.*
+              TargetFolder: '$(build.artifactstagingdirectory)\web'
+              CleanTargetFolder: true
+              OverWrite: true
+
+          - task: CopyFiles@2
+            displayName: 'Copy function files'
+            inputs:
+              SourceFolder: '$(build.artifactstagingdirectory)\tmp'
+              Contents: YamlDeploymentFunctions.*
+              TargetFolder: '$(build.artifactstagingdirectory)\functions'
+              CleanTargetFolder: true
+              OverWrite: true
+
+          - task: PublishPipelineArtifact@1
+            displayName: "Publish: Function Archive"
+            inputs:
+              targetPath: '$(build.artifactstagingdirectory)\functions'
+              ArtifactName: functions
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish: API'
+            inputs:
+              targetPath: '$(build.artifactstagingdirectory)\api'
+              ArtifactName: api
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish: Website'
+            inputs:
+              targetPath: '$(build.artifactstagingdirectory)\web'
+              ArtifactName: web
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish: Database'
+            inputs:
+              targetPath: '$(build.artifactstagingdirectory)\database'
+              ArtifactName: database
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))

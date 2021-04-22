@@ -1,0 +1,9 @@
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDomain\bin\Debug\netcoreapp3.1\YamlDeploymentDomain.deps.json
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDomain\bin\Debug\netcoreapp3.1\YamlDeploymentDomain.dll
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDomain\bin\Debug\netcoreapp3.1\YamlDeploymentDomain.pdb
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDomain\obj\Debug\netcoreapp3.1\YamlDeploymentDomain.csprojAssemblyReference.cache
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDomain\obj\Debug\netcoreapp3.1\YamlDeploymentDomain.AssemblyInfoInputs.cache
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDomain\obj\Debug\netcoreapp3.1\YamlDeploymentDomain.AssemblyInfo.cs
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDomain\obj\Debug\netcoreapp3.1\YamlDeploymentDomain.csproj.CoreCompileInputs.cache
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDomain\obj\Debug\netcoreapp3.1\YamlDeploymentDomain.dll
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDomain\obj\Debug\netcoreapp3.1\YamlDeploymentDomain.pdb

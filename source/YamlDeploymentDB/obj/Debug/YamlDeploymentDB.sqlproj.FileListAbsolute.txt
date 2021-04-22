@@ -1,0 +1,10 @@
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDB\bin\Debug\YamlDeploymentDB.dacpac
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDB\bin\Debug\YamlDeploymentDB.dll
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDB\bin\Debug\YamlDeploymentDB.pdb
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDB\obj\Debug\YamlDeploymentDB.sqlprojAssemblyReference.cache
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDB\obj\Debug\Model.xml
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDB\obj\Debug\refactor.xml
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDB\obj\Debug\postdeploy.sql
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDB\obj\Debug\predeploy.sql
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDB\obj\Debug\YamlDeploymentDB.dll
+C:\Repos\YamlDeploymentDemo\YamlDeploymentDB\obj\Debug\YamlDeploymentDB.pdb

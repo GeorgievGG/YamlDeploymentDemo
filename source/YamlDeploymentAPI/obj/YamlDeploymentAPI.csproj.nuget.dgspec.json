@@ -1,0 +1,222 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentAPI\\YamlDeploymentAPI.csproj": {}
+  },
+  "projects": {
+    "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentAPI\\YamlDeploymentAPI.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentAPI\\YamlDeploymentAPI.csproj",
+        "projectName": "YamlDeploymentAPI",
+        "projectPath": "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentAPI\\YamlDeploymentAPI.csproj",
+        "packagesPath": "C:\\Users\\georgi.ggeorgiev\\.nuget\\packages\\",
+        "outputPath": "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentAPI\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\georgi.ggeorgiev\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Repos\\nimbus-authentication-uwp\\Wacom.UXComponents.Authentication.UWP\\Nuget": {},
+          "C:\\Repos\\windowsuxcomponents\\NuGet": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://wacomwillnugetserver.azurewebsites.net/nuget": {},
+          "https://www.nuget.org/api/v2": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {
+              "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentInfrastructure\\YamlDeploymentInfrastructure.csproj": {
+                "projectPath": "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentInfrastructure\\YamlDeploymentInfrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.12, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.1.12, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentDomain\\YamlDeploymentDomain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentDomain\\YamlDeploymentDomain.csproj",
+        "projectName": "YamlDeploymentDomain",
+        "projectPath": "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentDomain\\YamlDeploymentDomain.csproj",
+        "packagesPath": "C:\\Users\\georgi.ggeorgiev\\.nuget\\packages\\",
+        "outputPath": "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentDomain\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\georgi.ggeorgiev\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Repos\\nimbus-authentication-uwp\\Wacom.UXComponents.Authentication.UWP\\Nuget": {},
+          "C:\\Repos\\windowsuxcomponents\\NuGet": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://wacomwillnugetserver.azurewebsites.net/nuget": {},
+          "https://www.nuget.org/api/v2": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentInfrastructure\\YamlDeploymentInfrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentInfrastructure\\YamlDeploymentInfrastructure.csproj",
+        "projectName": "YamlDeploymentInfrastructure",
+        "projectPath": "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentInfrastructure\\YamlDeploymentInfrastructure.csproj",
+        "packagesPath": "C:\\Users\\georgi.ggeorgiev\\.nuget\\packages\\",
+        "outputPath": "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentInfrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\georgi.ggeorgiev\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Repos\\nimbus-authentication-uwp\\Wacom.UXComponents.Authentication.UWP\\Nuget": {},
+          "C:\\Repos\\windowsuxcomponents\\NuGet": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://wacomwillnugetserver.azurewebsites.net/nuget": {},
+          "https://www.nuget.org/api/v2": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {
+              "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentDomain\\YamlDeploymentDomain.csproj": {
+                "projectPath": "C:\\Repos\\YamlDeploymentDemo\\YamlDeploymentDomain\\YamlDeploymentDomain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.12, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[3.1.12, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
