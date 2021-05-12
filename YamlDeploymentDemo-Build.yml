@@ -41,15 +41,6 @@ stages:
               configuration: '$(BuildConfiguration)'
 
           - task: CopyFiles@2
-            displayName: 'Copy Deploy Policy files'
-            inputs:
-              SourceFolder: deploy/policies
-              Contents: '**.json'
-              TargetFolder: '$(build.artifactstagingdirectory)\policies'
-              CleanTargetFolder: true
-              OverWrite: true
-
-          - task: CopyFiles@2
             displayName: 'Copy database'
             inputs:
               SourceFolder: '$(build.sourcesdirectory)'
@@ -85,13 +76,6 @@ stages:
               TargetFolder: '$(build.artifactstagingdirectory)\functions'
               CleanTargetFolder: true
               OverWrite: true
-         
-          - task: PublishPipelineArtifact@1
-            displayName: 'Publish Artifact: Deploy Policies'
-            inputs:
-              targetPath: '$(build.artifactstagingdirectory)\policies'
-              ArtifactName: policies
-            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
             
           - task: PublishPipelineArtifact@1
             displayName: "Publish: Function Archive"
