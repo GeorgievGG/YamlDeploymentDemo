@@ -1,0 +1,169 @@
+parameters:
+  # NOTE: do not try to pass the azure subscription via parameters, it does not work 27/7/2020
+  - name: SkipAutoscale
+    type: boolean
+    default: false
+
+  # Required
+  - name: ResourceGroup
+    type: string
+  - name: Region
+    type: string
+  - name: SiteName
+    type: string
+  - name: SqlServerName
+    type: string
+  - name: SqlServerAdminUser
+    type: string
+  - name: SqlserverAdminPassword
+    type: string
+  - name: SqlServerNameFqdn
+    type: string
+  - name: DbName
+    type: string
+  - name: WebServerFarmName
+    type: string
+  - name: WebServerResourceGroup
+    type: string
+  - name: ApplicationInsightsName
+    type: string
+  - name: StorageAccountName
+    type: string
+  - name: FunctionAppName
+    type: string
+  - name: CustomExServiceBusName
+    type: string
+  - name: ClientIdentifier
+    type: string
+  - name: ApiName
+    type: string
+  - name: JwtSigningKey
+    type: string
+  - name: TokenExpiryInMinutes
+    type: string
+
+  - name: ClockGroupUpdateInterval
+    type: string
+  - name: EmployeeCleanupCronTimer
+    type: string
+
+steps:
+  - download: YDD
+    displayName: 'Download Deploy Policies'
+    artifact: policies
+
+  - download: YDD
+    displayName: 'Download databases'
+    artifact: database
+
+  - download: YDD
+    displayName: 'Download API'
+    artifact: api
+
+  - download: YDD
+    displayName: 'Download Functions'
+    artifact: functions
+
+  - task: SqlAzureDacpacDeployment@1
+    displayName: 'Deploy Schema'
+    inputs:
+      azureSubscription: '$(AzureSubscription)'
+      ServerName: '${{ parameters.SqlServerNameFqdn }}'
+      DatabaseName: '${{ parameters.DbName }}'
+      SqlUsername: '${{ parameters.SqlServerAdminUser }}'
+      SqlPassword: '${{ parameters.SqlserverAdminPassword }}'
+      DacpacFile: '$(Pipeline.Workspace)/YDD/database/YamlDeploymentDB.dacpac'
+      AdditionalArguments: '/p:DropObjectsNotInSource=false /p:BlockOnPossibleDataLoss=false'
+
+  - task: AzureCLI@2
+    displayName: 'Deploy Infrastructure'
+    inputs:
+      azureSubscription: '$(AzureSubscription)'
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        function Test-Exit {
+            if ($lastexitcode -ne 0)
+            {
+                throw "AZ CLI Command failed, exit code: $lastexitcode"
+            }
+        }
+
+        Write-Host "Using ${{ parameters.ResourceGroup }}"
+        Write-Host "Using ${{ parameters.Region }}"
+
+        az extension add -n application-insights ; Test-Exit
+
+        $iKey = az monitor app-insights component show -g ${{ parameters.ResourceGroup }} -a ${{ parameters.ApplicationInsightsName }} --query "instrumentationKey" --out tsv
+        $appServicePlanId = az appservice plan show -n ${{ parameters.WebServerFarmName }} -g ${{ parameters.WebServerResourceGroup }} --query "id" -o tsv #todo
+        $adsBufferQueueName = 'ads-employee-trans-buffer' #todo
+        $adsTransactionScaleName = 'ads-transaction-buffer' #todo
+        $adsTransactionProfileName = "${{ parameters.SiteName }}-ads" #todo
+
+        Write-Host "Creating storage account"
+        az storage account create `
+          -n "${{ parameters.StorageAccountName }}" -g ${{ parameters.ResourceGroup }} -l "${{ parameters.Region }}" --sku Standard_ZRS `
+          --encryption-services blob | Out-Null ; Test-Exit #todo
+
+        Write-Host "Creating API WebApp"
+        az webapp create -n "${{ parameters.ApiName }}" -p $appServicePlanId -g ${{ parameters.ResourceGroup }} | Out-Null ; Test-Exit
+
+        Write-Host "Creating functionapp"
+        az functionapp create `
+          -n "${{ parameters.FunctionAppName }}" -s "${{ parameters.StorageAccountName }}" -p $appServicePlanId -g ${{ parameters.ResourceGroup }} `
+          --app-insights-key $iKey --functions-version 3 | Out-Null ; Test-Exit
+
+        Write-Host "Setting config strings"
+        $storageConnString = az storage account show-connection-string -g ${{ parameters.ResourceGroup }} -n ${{ parameters.StorageAccountName }} --query "connectionString" --out tsv         
+        $dbConnectionString = "Server=tcp:${{ parameters.SqlServerName }}.database.windows.net,1433;Initial Catalog=${{ parameters.DbName }};Persist Security Info=False;User ID=${{ parameters.SqlServerAdminUser }};Password=${{ parameters.SqlserverAdminPassword }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+
+        az webapp config appsettings set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.ApiName }}" --settings `
+          "APPINSIGHTS_INSTRUMENTATIONKEY=$iKey" `
+          "AdsConfigurationOptions:JwtSigningKey=${{ parameters.JwtSigningKey }}" `
+          "AdsConfigurationOptions:TokenExpiryInMinutes=${{ parameters.TokenExpiryInMinutes }}"
+
+        az webapp config connection-string set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.ApiName }}" -t Custom --settings `
+          "DeviceManagerDb=$dbConnectionString"
+
+        az functionapp config appsettings set -n "${{ parameters.FunctionAppName }}" -g ${{ parameters.ResourceGroup }} --settings `
+          "AzureWebJobsStorage=$storageConnString" `
+          "DeviceManagerDb=$dbConnectionString" `
+          "ClockGroupUpdateInterval=${{ parameters.ClockGroupUpdateInterval }}" `
+          "EmployeeCleanupCronTimer=${{ parameters.EmployeeCleanupCronTimer }}" `
+          "AzureFunctionsJobHost__logging__applicationInsights__samplingSettings__isEnabled=true" `
+          "AzureFunctionsJobHost__logging__logLevel__default=Error"
+
+        # Output variables for next task
+        Write-Host "##vso[task.setvariable variable=IKey]$iKey"
+
+  - task: AzureRmWebAppDeployment@4
+    displayName: Deploy API
+    inputs:
+      azureSubscription: $(AzureSubscription)
+      appType: 'webApp'
+      WebAppName: '${{ parameters.ApiName }}'
+      package: '$(Pipeline.Workspace)/YDD/api/YamlDeploymentAPI.zip'
+      # enableCustomDeployment: true
+      # DeploymentType: 'zipDeploy'
+
+  - task: AzureAppServiceManage@0
+    displayName: 'Stop functions'
+    inputs:
+      azureSubscription: '$(AzureSubscription)'
+      Action: 'Stop Azure App Service'
+      WebAppName: '${{ parameters.FunctionAppName }}'
+
+  - task: AzureRmWebAppDeployment@4
+    displayName: 'Deploy functions'
+    inputs:
+      azureSubscription: '$(AzureSubscription)'
+      appType: functionApp
+      WebAppName: '${{ parameters.FunctionAppName }}'
+      packageForLinux: '$(Pipeline.Workspace)/ADS/ads-functions/GT.ADS.Functions.zip'
+
+  - task: AzureAppServiceManage@0
+    displayName: 'Start functions'
+    inputs:
+      azureSubscription: '$(AzureSubscription)'
+      Action: 'Start Azure App Service'
+      WebAppName: '${{ parameters.FunctionAppName }}'

@@ -19,7 +19,7 @@ name: YamlDeploymentDemo-Build_$(majorVersion).$(minorVersion).$(patchVersion).$
 stages:
   - stage: Build
     jobs:
-      - job: Build_AdvancedDistributionSystem
+      - job: Build_YamlDeploymentDemo
         pool:
           vmImage: "windows-latest"
 
@@ -39,6 +39,15 @@ stages:
               msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\tmp"'
               platform: '$(BuildPlatform)'
               configuration: '$(BuildConfiguration)'
+
+          - task: CopyFiles@2
+            displayName: 'Copy Deploy Policy files'
+            inputs:
+              SourceFolder: deploy/policies
+              Contents: '**.json'
+              TargetFolder: '$(build.artifactstagingdirectory)\policies'
+              CleanTargetFolder: true
+              OverWrite: true
 
           - task: CopyFiles@2
             displayName: 'Copy database'
@@ -76,7 +85,14 @@ stages:
               TargetFolder: '$(build.artifactstagingdirectory)\functions'
               CleanTargetFolder: true
               OverWrite: true
-
+         
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish Artifact: Deploy Policies'
+            inputs:
+              targetPath: '$(build.artifactstagingdirectory)\policies'
+              ArtifactName: policies
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+            
           - task: PublishPipelineArtifact@1
             displayName: "Publish: Function Archive"
             inputs:
