@@ -6,7 +6,7 @@ resources:
       source: Build-YamlDeploymentDemo #matches the build pipeline in DevOps
 
 variables:
-  - group: 'YamlDeploymentVarGrp'
+  - group: 'YamlDeploymentDemoRG'
   - name: AzureSubscription
     value: 'Azure Personal Sub' #should match an AzureRM connection in DevOps
 
