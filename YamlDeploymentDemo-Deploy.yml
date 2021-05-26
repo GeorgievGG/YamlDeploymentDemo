@@ -6,7 +6,7 @@ resources:
       source: Build-YamlDeploymentDemo #matches the build pipeline in DevOps
 
 variables:
-  - group: 'YamlDeploymentDemoRG'
+  - group: 'YamlDeploymentVarGrp' #variable group located in Library tab
   - name: AzureSubscription
     value: 'Azure Personal Sub' #should match an AzureRM connection in DevOps
 
@@ -14,7 +14,7 @@ stages:
   - stage: Deploy_All
     dependsOn: []
     variables:
-      ResourceGroup: YamlDeploymentVarGrp
+      ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
       EnvironmentName: YamlDeploymentEnv
       SiteName: yaml-deployment
       RedisDatabaseId: 3
