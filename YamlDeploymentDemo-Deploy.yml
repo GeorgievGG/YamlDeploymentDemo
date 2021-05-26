@@ -28,7 +28,7 @@ stages:
             deploy:
               steps:
                 
-                - template: templates/ydd.yml
+                - template: Templates/ydd.yml
                   parameters:
                     ResourceGroup: $(ResourceGroup)
                     Region: $(Region)
