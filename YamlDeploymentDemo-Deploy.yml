@@ -3,7 +3,7 @@ trigger: none
 resources:
   pipelines:
     - pipeline: YDD
-      source: YamlDeploymentDemo-Build
+      source: Build-YamlDeploymentDemo #matches the build pipeline in DevOps
 
 variables:
   - group: 'YamlDeploymentVarGrp'
