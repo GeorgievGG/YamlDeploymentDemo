@@ -44,9 +44,9 @@ stages:
                     StorageAccountName: $(SiteName)ydd
                     FunctionAppName: $(SiteName)-fn
                     CustomExServiceBusName: $(SiteName)-servicebus
-                    ClientIdentifier: AOD #todo
                     ApiName: $(SiteName)-api
                     JwtSigningKey: Qf47nscNoWPo5QpZbR4Bp2nzFQXBFHv5HPVA02Ltmz6BNJKFRwEfRK8Hzw #todo
                     TokenExpiryInMinutes: 5
+                    StolenBikeCheckFunctionInterval: 0 */5 * * * *
 
                     

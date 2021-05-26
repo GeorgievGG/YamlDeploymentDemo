@@ -33,18 +33,13 @@ parameters:
     type: string
   - name: CustomExServiceBusName
     type: string
-  - name: ClientIdentifier
-    type: string
   - name: ApiName
     type: string
   - name: JwtSigningKey
     type: string
   - name: TokenExpiryInMinutes
     type: string
-
-  - name: ClockGroupUpdateInterval
-    type: string
-  - name: EmployeeCleanupCronTimer
+  - name: StolenBikeCheckFunctionInterval
     type: string
 
 steps:
@@ -128,8 +123,7 @@ steps:
         az functionapp config appsettings set -n "${{ parameters.FunctionAppName }}" -g ${{ parameters.ResourceGroup }} --settings `
           "AzureWebJobsStorage=$storageConnString" `
           "DeviceManagerDb=$dbConnectionString" `
-          "ClockGroupUpdateInterval=${{ parameters.ClockGroupUpdateInterval }}" `
-          "EmployeeCleanupCronTimer=${{ parameters.EmployeeCleanupCronTimer }}" `
+          "StolenBikeCheckFunctionInterval=${{ parameters.StolenBikeCheckFunctionInterval }}" `
           "AzureFunctionsJobHost__logging__applicationInsights__samplingSettings__isEnabled=true" `
           "AzureFunctionsJobHost__logging__logLevel__default=Error"
 
