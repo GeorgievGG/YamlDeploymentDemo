@@ -14,7 +14,7 @@ stages:
   - stage: Deploy_All
     dependsOn: []
     variables:
-      ResourceGroup: YamlDeploymentDemoGroup
+      ResourceGroup: YamlDeploymentVarGrp
       EnvironmentName: YamlDeploymentEnv
       SiteName: yaml-deployment
       RedisDatabaseId: 3
