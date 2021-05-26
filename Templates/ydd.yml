@@ -44,10 +44,6 @@ parameters:
 
 steps:
   - download: YDD
-    displayName: 'Download Deploy Policies'
-    artifact: policies
-
-  - download: YDD
     displayName: 'Download databases'
     artifact: database
 
@@ -153,7 +149,7 @@ steps:
       azureSubscription: '$(AzureSubscription)'
       appType: functionApp
       WebAppName: '${{ parameters.FunctionAppName }}'
-      packageForLinux: '$(Pipeline.Workspace)/ADS/ads-functions/GT.ADS.Functions.zip'
+      packageForLinux: '$(Pipeline.Workspace)/YDD/ads-functions/GT.ADS.Functions.zip'
 
   - task: AzureAppServiceManage@0
     displayName: 'Start functions'
