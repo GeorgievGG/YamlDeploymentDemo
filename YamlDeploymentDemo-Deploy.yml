@@ -8,13 +8,13 @@ resources:
 variables:
   - group: 'YamlDeploymentVarGrp'
   - name: AzureSubscription
-    value: 'Azure Development Subscription' #todo
+    value: 'Azure Personal Sub' #should match an AzureRM connection in DevOps
 
 stages:
   - stage: Deploy_All
     dependsOn: []
     variables:
-      ResourceGroup: YamlDeploymentGrp
+      ResourceGroup: YamlDeploymentDemoGroup
       EnvironmentName: YamlDeploymentEnv
       SiteName: yaml-deployment
       RedisDatabaseId: 3
