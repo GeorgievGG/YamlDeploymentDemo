@@ -56,7 +56,7 @@ steps:
     artifact: functions
     
   - task: AzureCLI@2
-    displayName: 'Ensure resources exist'
+    displayName: 'Ensure resources exist' # These are usually created separately from the deployment, that's why I separated them here
     inputs:
       azureSubscription: '$(AzureSubscription)'
       scriptType: pscore
@@ -78,12 +78,18 @@ steps:
             az sql server create --name ${{ parameters.SqlServerName }} --resource-group ${{ parameters.ResourceGroup }} --location "${{ parameters.Region }}" --admin-user ${{ parameters.SqlServerAdminUser }} --admin-password ${{ parameters.SqlserverAdminPassword }}
         }
         
-        az extension add -n application-insights ; Test-Exit
+        az extension add -n application-insights ; Test-Exit # This is a fail early function
         
         $insightsCheck = az monitor app-insights component show -g YamlDeploymentDemoRG --query "[?name=='${{ parameters.ApplicationInsightsName }}']" | ConvertFrom-Json
         $insightsExists = $insightsCheck.Length -gt 0
         if (!$insightsExists) {
             az monitor app-insights component create --app ${{ parameters.ApplicationInsightsName }} --location "${{ parameters.Region }}" -g ${{ parameters.ResourceGroup }} 
+        }
+        
+        $storageAccCheck = az storage account list --query "[?name=='${{ parameters.StorageAccountName }}']" | ConvertFrom-Json
+        $storageAccExists = $storageAccCheck.Length -gt 0
+        if (!$storageAccExists) {
+            az storage account create --name ${{ parameters.StorageAccountName }} --resource-group ${{ parameters.ResourceGroup }}
         }
     
   - task: SqlAzureDacpacDeployment@1
