@@ -72,12 +72,12 @@ steps:
         Write-Host "Using ${{ parameters.ResourceGroup }}"
         Write-Host "Using ${{ parameters.Region }}"
         
-        $serverCheck = az sql server list --query "[?name=='${{ parameters.SqlServerNameFqdn }}']" | ConvertFrom-Json
+        $serverCheck = az sql server list --query "[?name=='${{ parameters.SqlServerName }}']" | ConvertFrom-Json
         Write-Host "Servercheck: $serverCheck"
         
         $serverExists = $serverCheck.Length -gt 0
         if (!$serverExists) {
-            az sql server create --name ${{ parameters.SqlServerNameFqdn }} --resource-group ${{ parameters.ResourceGroup }} --location "${{ parameters.Region }}" --admin-user ${{ parameters.SqlServerAdminUser }} --admin-password ${{ parameters.SqlserverAdminPassword }}
+            az sql server create --name ${{ parameters.SqlServerName }} --resource-group ${{ parameters.ResourceGroup }} --location "${{ parameters.Region }}" --admin-user ${{ parameters.SqlServerAdminUser }} --admin-password ${{ parameters.SqlserverAdminPassword }}
         }
     
   - task: SqlAzureDacpacDeployment@1
