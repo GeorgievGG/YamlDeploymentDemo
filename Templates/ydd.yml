@@ -54,7 +54,32 @@ steps:
   - download: YDD
     displayName: 'Download Functions'
     artifact: functions
-
+    
+  - task: AzureCLI@2
+    displayName: 'Ensure SQL Server exists'
+    inputs:
+      azureSubscription: '$(AzureSubscription)'
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        function Test-Exit {
+            if ($lastexitcode -ne 0)
+            {
+                throw "AZ CLI Command failed, exit code: $lastexitcode"
+            }
+        }
+    
+        Write-Host "Using ${{ parameters.ResourceGroup }}"
+        Write-Host "Using ${{ parameters.Region }}"
+        
+        $serverCheck = az sql server list --query "[?name=='${{ parameters.SqlServerNameFqdn }}']" | ConvertFrom-Json
+        Write-Host "Servercheck: $serverCheck"
+        
+        $serverExists = $serverCheck.Length -gt 0
+        if (!$serverExists) {
+            az sql server create --name ${{ parameters.SqlServerNameFqdn }} --resource-group ${{ parameters.ResourceGroup }} --location "${{ parameters.Region }}" --admin-user ${{ parameters.SqlServerAdminUser }} --admin-password ${{ parameters.SqlserverAdminPassword }}
+        }
+    
   - task: SqlAzureDacpacDeployment@1
     displayName: 'Deploy Schema'
     inputs:
