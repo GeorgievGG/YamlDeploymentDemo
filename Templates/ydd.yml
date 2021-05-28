@@ -56,28 +56,27 @@ steps:
     artifact: functions
     
   - task: AzureCLI@2
-    displayName: 'Ensure SQL Server exists'
+    displayName: 'Ensure resources exist'
     inputs:
       azureSubscription: '$(AzureSubscription)'
       scriptType: pscore
       scriptLocation: inlineScript
-      inlineScript: |
-        function Test-Exit {
-            if ($lastexitcode -ne 0)
-            {
-                throw "AZ CLI Command failed, exit code: $lastexitcode"
-            }
-        }
-    
+      inlineScript: |    
         Write-Host "Using ${{ parameters.ResourceGroup }}"
         Write-Host "Using ${{ parameters.Region }}"
         
-        $serverCheck = az sql server list --query "[?name=='${{ parameters.SqlServerName }}']" | ConvertFrom-Json
-        Write-Host "Servercheck: $serverCheck"
-        
-        $serverExists = $serverCheck.Length -gt 0
+        $sqlServerCheck = az sql server list --query "[?name=='${{ parameters.SqlServerName }}']" | ConvertFrom-Json
+        $serverExists = $sqlServerCheck.Length -gt 0
         if (!$serverExists) {
             az sql server create --name ${{ parameters.SqlServerName }} --resource-group ${{ parameters.ResourceGroup }} --location "${{ parameters.Region }}" --admin-user ${{ parameters.SqlServerAdminUser }} --admin-password ${{ parameters.SqlserverAdminPassword }}
+        }
+        
+        az extension add -n application-insights ; Test-Exit
+        
+        $insightsCheck = az monitor app-insights component show -g YamlDeploymentDemoRG --query "[?name=='${{ parameters.ApplicationInsightsName }}']" | ConvertFrom-Json
+        $insightsExists = $insightsCheck.Length -gt 0
+        if (!$insightsExists) {
+            az monitor app-insights component create --app ${{ parameters.ApplicationInsightsName }} --location "${{ parameters.Region }}" -g ${{ parameters.ResourceGroup }} 
         }
     
   - task: SqlAzureDacpacDeployment@1
