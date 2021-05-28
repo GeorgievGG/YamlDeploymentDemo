@@ -16,7 +16,7 @@ stages:
     variables:
       ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
       EnvironmentName: YamlDeploymentEnv
-      SiteName: yamldeploymentdemo
+      SiteName: yamldeploydemo
       RedisDatabaseId: 3
     jobs:
       - deployment: YDD_Full_Deploy
