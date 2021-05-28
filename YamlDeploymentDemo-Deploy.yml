@@ -37,15 +37,15 @@ stages:
                     SqlServerAdminUser: $(SqlServerAdminUser)
                     SqlserverAdminPassword: $(SqlserverAdminPassword)
                     SqlServerNameFqdn: $(SqlServerNameFqdn)
-                    DbName: custexqa0-db #todo
+                    DbName: ydd-db
                     WebServerFarmName: $(WebServerFarmName)
                     WebServerResourceGroup: $(WebServerResourceGroup)
                     ApplicationInsightsName: $(SiteName)-appinsights
-                    StorageAccountName: $(SiteName)ydd
+                    StorageAccountName: $(SiteName)storage
                     FunctionAppName: $(SiteName)-fn
                     CustomExServiceBusName: $(SiteName)-servicebus
                     ApiName: $(SiteName)-api
-                    JwtSigningKey: Qf47nscNoWPo5QpZbR4Bp2nzFQXBFHv5HPVA02Ltmz6BNJKFRwEfRK8Hzw #todo
+                    JwtSigningKey: Qf47nscNoWPo5Qp****blabla****z6BNJKFRwEfRKxKZL #todo
                     TokenExpiryInMinutes: 5
                     StolenBikeCheckFunctionInterval: 0 */5 * * * *
 

@@ -56,7 +56,7 @@ steps:
     artifact: functions
     
   - task: AzureCLI@2
-    displayName: 'Ensure resources exist' # These are usually created separately from the deployment, that's why I separated them here
+    displayName: 'Ensure common resources exist' # These are usually created separately from the deployment, that's why I separated them here
     inputs:
       azureSubscription: '$(AzureSubscription)'
       scriptType: pscore
@@ -92,13 +92,13 @@ steps:
             Write-Host "App Insights ${{ parameters.ApplicationInsightsName }} already exists!"
         }
         
-        $storageAccCheck = az storage account list --query "[?name=='${{ parameters.StorageAccountName }}']" | ConvertFrom-Json
-        $storageAccExists = $storageAccCheck.Length -gt 0
-        if (!$storageAccExists) {
-            az storage account create --name ${{ parameters.StorageAccountName }} --resource-group ${{ parameters.ResourceGroup }}
+        $appServicePlanCheck = az appservice plan list --query "[?name=='${{ parameters.WebServerFarmName }}']" | ConvertFrom-Json
+        $appServicePlanExists = $appServicePlanCheck.Length -gt 0
+        if (!$appServicePlanExists) {
+            az appservice plan create --name ${{ parameters.WebServerFarmName }} --resource-group ${{ parameters.ResourceGroup }}
         }
         else { 
-            Write-Host "Storage account ${{ parameters.StorageAccountName }} already exists!"
+            Write-Host "App Service Plan ${{ parameters.WebServerFarmName }} already exists!"
         }
     
   - task: SqlAzureDacpacDeployment@1
@@ -139,7 +139,7 @@ steps:
 
         Write-Host "Creating storage account"
         az storage account create `
-          -n "${{ parameters.StorageAccountName }}" -g ${{ parameters.ResourceGroup }} -l "${{ parameters.Region }}" --sku Standard_ZRS `
+          -n "${{ parameters.StorageAccountName }}" -g ${{ parameters.ResourceGroup }} -l "${{ parameters.Region }}" `
           --encryption-services blob | Out-Null ; Test-Exit #todo
 
         Write-Host "Creating API WebApp"
