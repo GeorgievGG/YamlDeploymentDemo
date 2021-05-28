@@ -29,9 +29,9 @@ parameters:
     type: string
   - name: StorageAccountName
     type: string
-  - name: FunctionAppName
+  - name: WebAppName
     type: string
-  - name: CustomExServiceBusName
+  - name: FunctionAppName
     type: string
   - name: ApiName
     type: string
@@ -145,6 +145,9 @@ steps:
         Write-Host "Creating API WebApp"
         az webapp create -n "${{ parameters.ApiName }}" -p $appServicePlanId -g ${{ parameters.ResourceGroup }} | Out-Null ; Test-Exit
 
+        Write-Host "Creating Front-end WebApp"
+        az webapp create -n "${{ parameters.WebAppName }}" -p $appServicePlanId -g ${{ parameters.ResourceGroup }} | Out-Null ; Test-Exit
+
         Write-Host "Creating functionapp"
         az functionapp create `
           -n "${{ parameters.FunctionAppName }}" -s "${{ parameters.StorageAccountName }}" -p $appServicePlanId -g ${{ parameters.ResourceGroup }} `
@@ -179,6 +182,16 @@ steps:
       appType: 'webApp'
       WebAppName: '${{ parameters.ApiName }}'
       package: '$(Pipeline.Workspace)/YDD/api/YamlDeploymentAPI.zip'
+      # enableCustomDeployment: true
+      # DeploymentType: 'zipDeploy'
+
+  - task: AzureRmWebAppDeployment@4
+    displayName: Deploy Front-end
+    inputs:
+      azureSubscription: $(AzureSubscription)
+      appType: 'webApp'
+      WebAppName: '${{ parameters.WebAppName }}'
+      package: '$(Pipeline.Workspace)/YDD/web/YamlDeploymentWeb.zip'
       # enableCustomDeployment: true
       # DeploymentType: 'zipDeploy'
 

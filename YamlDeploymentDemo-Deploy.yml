@@ -42,8 +42,8 @@ stages:
                     WebServerResourceGroup: $(ResourceGroup)
                     ApplicationInsightsName: $(SiteName)-appinsights
                     StorageAccountName: $(SiteName)storage
+                    WebAppName: $(SiteName)-web
                     FunctionAppName: $(SiteName)-fn
-                    CustomExServiceBusName: $(SiteName)-servicebus
                     ApiName: $(SiteName)-api
                     JwtSigningKey: Qf47nscNoWPo5Qp****blabla****z6BNJKFRwEfRKxKZL #todo
                     TokenExpiryInMinutes: 5
