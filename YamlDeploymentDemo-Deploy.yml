@@ -39,7 +39,7 @@ stages:
                     SqlServerNameFqdn: $(SqlServerNameFqdn)
                     DbName: ydd-db
                     WebServerFarmName: $(WebServerFarmName)
-                    WebServerResourceGroup: $(WebServerResourceGroup)
+                    WebServerResourceGroup: $(ResourceGroup)
                     ApplicationInsightsName: $(SiteName)-appinsights
                     StorageAccountName: $(SiteName)storage
                     FunctionAppName: $(SiteName)-fn
