@@ -62,6 +62,13 @@ steps:
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |    
+        function Test-Exit {
+            if ($lastexitcode -ne 0)
+            {
+                throw "AZ CLI Command failed, exit code: $lastexitcode"
+            }
+        }
+        
         Write-Host "Using ${{ parameters.ResourceGroup }}"
         Write-Host "Using ${{ parameters.Region }}"
         
