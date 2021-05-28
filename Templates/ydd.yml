@@ -195,7 +195,7 @@ steps:
       azureSubscription: '$(AzureSubscription)'
       appType: functionApp
       WebAppName: '${{ parameters.FunctionAppName }}'
-      packageForLinux: '$(Pipeline.Workspace)/YDD/ads-functions/YamlDeploymentFunctions.zip'
+      packageForLinux: '$(Pipeline.Workspace)/YDD/functions/YamlDeploymentFunctions.zip'
 
   - task: AzureAppServiceManage@0
     displayName: 'Start functions'
