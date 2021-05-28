@@ -77,6 +77,9 @@ steps:
         if (!$serverExists) {
             az sql server create --name ${{ parameters.SqlServerName }} --resource-group ${{ parameters.ResourceGroup }} --location "${{ parameters.Region }}" --admin-user ${{ parameters.SqlServerAdminUser }} --admin-password ${{ parameters.SqlserverAdminPassword }}
         }
+        else { 
+            Write-Host "SQL Server ${{ parameters.SqlServerName }} already exists!"
+        }
         
         az extension add -n application-insights ; Test-Exit # This is a fail early function
         
@@ -85,11 +88,17 @@ steps:
         if (!$insightsExists) {
             az monitor app-insights component create --app ${{ parameters.ApplicationInsightsName }} --location "${{ parameters.Region }}" -g ${{ parameters.ResourceGroup }} 
         }
+        else { 
+            Write-Host "App Insights ${{ parameters.ApplicationInsightsName }} already exists!"
+        }
         
         $storageAccCheck = az storage account list --query "[?name=='${{ parameters.StorageAccountName }}']" | ConvertFrom-Json
         $storageAccExists = $storageAccCheck.Length -gt 0
         if (!$storageAccExists) {
             az storage account create --name ${{ parameters.StorageAccountName }} --resource-group ${{ parameters.ResourceGroup }}
+        }
+        else { 
+            Write-Host "Storage account ${{ parameters.StorageAccountName }} already exists!"
         }
     
   - task: SqlAzureDacpacDeployment@1
