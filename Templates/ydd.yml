@@ -54,6 +54,10 @@ steps:
   - download: YDD
     displayName: 'Download Functions'
     artifact: functions
+
+  - download: YDD
+    displayName: 'Download Front-end'
+    artifact: web
     
   - task: AzureCLI@2
     displayName: 'Ensure common resources exist' # These are usually created separately from the deployment, that's why I separated them here
