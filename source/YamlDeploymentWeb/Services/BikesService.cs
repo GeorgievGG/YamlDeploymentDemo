@@ -22,6 +22,7 @@ namespace YamlDeploymentWeb.Services
         public async Task<List<BikeDto>> GetBikes()
         {
             var apiUrl = configuration.GetValue<string>("ApiUrl");
+            throw new System.Exception($"Current apiUrl: {apiUrl}");
             HttpResponseMessage tokenResponse = await httpClient.GetAsync(apiUrl);
             var jsonContent = await tokenResponse.Content.ReadAsStringAsync();
 
