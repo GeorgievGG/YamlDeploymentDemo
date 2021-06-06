@@ -5,8 +5,8 @@ pool:
 
 resources:
   pipelines:
-    - pipeline: sourcePipeline
-      source: 'Pipelines Trigger - Source'
+    - pipeline: YDD
+      source: 'Build-YamlDeploymentDemo' #matches the build pipeline in DevOps
       branch: master
       trigger:
         branches:
