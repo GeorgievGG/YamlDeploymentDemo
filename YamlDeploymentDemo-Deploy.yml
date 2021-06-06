@@ -11,9 +11,49 @@ resources:
       trigger:
         branches:
         - '*'
-              
-steps:
-- script: echo Triggered by source pipeline
-  displayName: 'Proba proba'
+
+variables:
+  - group: 'YamlDeploymentVarGrp' #variable group located in Library tab
+  - name: AzureSubscription
+    value: 'Azure Personal Sub' #should match an AzureRM connection in DevOps
+
+stages:
+  - stage: Deploy_All
+    dependsOn: []
+    variables:
+      ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
+      EnvironmentName: YamlDeploymentEnv
+      SiteName: yamldeploydemo
+      RedisDatabaseId: 3
+    jobs:
+      - deployment: YDD_Full_Deploy
+        environment: ${{ variables.EnvironmentName }}
+        pool:
+          vmImage: 'windows-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                
+                - template: Templates/ydd.yml
+                  parameters:
+                    ResourceGroup: $(ResourceGroup)
+                    Region: $(Region)
+                    SiteName: $(SiteName)
+                    SqlServerName: $(SqlServerName)
+                    SqlServerAdminUser: $(SqlServerAdminUser)
+                    SqlserverAdminPassword: $(SqlserverAdminPassword)
+                    SqlServerNameFqdn: $(SqlServerNameFqdn)
+                    DbName: ydd-db
+                    WebServerFarmName: $(WebServerFarmName)
+                    WebServerResourceGroup: $(ResourceGroup)
+                    ApplicationInsightsName: $(SiteName)-appinsights
+                    StorageAccountName: $(SiteName)storage
+                    WebAppName: $(SiteName)-web
+                    FunctionAppName: $(SiteName)-fn
+                    ApiName: $(SiteName)-api
+                    JwtSigningKey: Qf47nscNoWPo5Qp****blabla****z6BNJKFRwEfRKxKZL #todo
+                    TokenExpiryInMinutes: 5
+                    StolenBikeCheckFunctionInterval: 0 */5 * * * *
 
                     
