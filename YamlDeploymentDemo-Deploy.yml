@@ -4,8 +4,8 @@ resources:
   pipelines:
     - pipeline: YDD
       source: Build-YamlDeploymentDemo #matches the build pipeline in DevOps
-        trigger:
-          branches:
+      trigger:
+        branches:
             include:
               - master
 
