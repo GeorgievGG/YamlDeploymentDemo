@@ -120,7 +120,7 @@ steps:
     displayName: 'Deploy Infrastructure'
     inputs:
       azureSubscription: '$(AzureSubscription)'
-      scriptType: pscore
+      scriptType: pscore # PowerShell Core script
       scriptLocation: inlineScript
       inlineScript: |
         function Test-Exit {
@@ -189,8 +189,6 @@ steps:
       appType: 'webApp'
       WebAppName: '${{ parameters.ApiName }}'
       package: '$(Pipeline.Workspace)/YDD/api/YamlDeploymentAPI.zip'
-      # enableCustomDeployment: true
-      # DeploymentType: 'zipDeploy'
 
   - task: AzureRmWebAppDeployment@4
     displayName: Deploy Front-end
@@ -199,8 +197,6 @@ steps:
       appType: 'webApp'
       WebAppName: '${{ parameters.WebAppName }}'
       package: '$(Pipeline.Workspace)/YDD/web/YamlDeploymentWeb.zip'
-      # enableCustomDeployment: true
-      # DeploymentType: 'zipDeploy'
 
   - task: AzureAppServiceManage@0
     displayName: 'Stop functions'
