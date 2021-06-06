@@ -4,10 +4,7 @@ resources:
   pipelines:
     - pipeline: YDD
       source: Build-YamlDeploymentDemo #matches the build pipeline in DevOps
-      trigger:
-        branches:
-            include:
-              - '*'
+      trigger: true
 
 variables:
   - group: 'YamlDeploymentVarGrp' #variable group located in Library tab
