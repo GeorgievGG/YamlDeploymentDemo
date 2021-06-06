@@ -4,7 +4,13 @@ resources:
   pipelines:
     - pipeline: YDD
       source: 'Build-YamlDeploymentDemo' #matches the build pipeline in DevOps
-      branch: s
+      branch: master
+      trigger:
+        branches:
+        - '*'
+    - pipeline: New
+      source: 'Pipelines Trigger - Source'
+      branch: master
       trigger:
         branches:
         - '*'
