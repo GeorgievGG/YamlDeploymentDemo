@@ -169,8 +169,8 @@ steps:
         az webapp config connection-string set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.ApiName }}" -t Custom --settings `
           "Db_Connection_String=$dbConnectionString"
 
-        az webapp config connection-string set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.WebAppName }}" -t Custom --settings `
-          "ApiUrl=https://yamldeploydemo-api.azurewebsites.net/bike"
+        az webapp config connection-string set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.WebAppName }}" --settings `
+          "ApiUrl=https://${{ parameters.ApiName }}.azurewebsites.net/bike"
 
         az functionapp config appsettings set -n "${{ parameters.FunctionAppName }}" -g ${{ parameters.ResourceGroup }} --settings `
           "AzureWebJobsStorage=$storageConnString" `
