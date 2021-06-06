@@ -3,7 +3,7 @@ trigger: none
 resources:
   pipelines:
     - pipeline: YDD
-      source: Build-YamlDeploymentDemo #matches the build pipeline in DevOps
+      source: 'Build-YamlDeploymentDemo' #matches the build pipeline in DevOps
       branch: master
       trigger:
         branches:
