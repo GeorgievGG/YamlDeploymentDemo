@@ -1,62 +1,19 @@
 trigger: none
 
+pool:
+    vmImage: "windows-latest"
+
 resources:
   pipelines:
-    - pipeline: YDD
-      source: 'Build-YamlDeploymentDemo' #matches the build pipeline in DevOps
-      branch: master
-      trigger:
-        branches:
-        - '*'
-    - pipeline: New
+    - pipeline: sourcePipeline
       source: 'Pipelines Trigger - Source'
       branch: master
       trigger:
         branches:
         - '*'
-
-variables:
-  - group: 'YamlDeploymentVarGrp' #variable group located in Library tab
-  - name: AzureSubscription
-    value: 'Azure Personal Sub' #should match an AzureRM connection in DevOps
-
-stages:
-  - stage: Deploy_All
-    dependsOn: []
-    variables:
-      ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
-      EnvironmentName: YamlDeploymentEnv
-      SiteName: yamldeploydemo
-      RedisDatabaseId: 3
-    jobs:
-      - deployment: YDD_Full_Deploy
-        environment: ${{ variables.EnvironmentName }}
-        pool:
-          vmImage: 'windows-latest'
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                
-                - template: Templates/ydd.yml
-                  parameters:
-                    ResourceGroup: $(ResourceGroup)
-                    Region: $(Region)
-                    SiteName: $(SiteName)
-                    SqlServerName: $(SqlServerName)
-                    SqlServerAdminUser: $(SqlServerAdminUser)
-                    SqlserverAdminPassword: $(SqlserverAdminPassword)
-                    SqlServerNameFqdn: $(SqlServerNameFqdn)
-                    DbName: ydd-db
-                    WebServerFarmName: $(WebServerFarmName)
-                    WebServerResourceGroup: $(ResourceGroup)
-                    ApplicationInsightsName: $(SiteName)-appinsights
-                    StorageAccountName: $(SiteName)storage
-                    WebAppName: $(SiteName)-web
-                    FunctionAppName: $(SiteName)-fn
-                    ApiName: $(SiteName)-api
-                    JwtSigningKey: Qf47nscNoWPo5Qp****blabla****z6BNJKFRwEfRKxKZL #todo
-                    TokenExpiryInMinutes: 5
-                    StolenBikeCheckFunctionInterval: 0 */5 * * * *
+              
+steps:
+- script: echo Triggered by source pipeline
+  displayName: 'Proba proba'
 
                     
