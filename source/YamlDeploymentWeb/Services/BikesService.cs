@@ -11,18 +11,18 @@ namespace YamlDeploymentWeb.Services
     public class BikesService : IBikesService
     {
         private readonly IConfiguration configuration;
+        private readonly string apiUrl;
         private readonly HttpClient httpClient;
 
         public BikesService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             this.configuration = configuration;
+            this.apiUrl = configuration.GetConnectionString("ApiUrl");
             this.httpClient = httpClientFactory.CreateClient();
         }
 
         public async Task<List<BikeDto>> GetBikes()
         {
-            var apiUrl = configuration.GetValue<string>("ApiUrl");
-            throw new System.Exception($"Current apiUrl: {apiUrl}");
             HttpResponseMessage tokenResponse = await httpClient.GetAsync(apiUrl);
             var jsonContent = await tokenResponse.Content.ReadAsStringAsync();
 
@@ -38,13 +38,11 @@ namespace YamlDeploymentWeb.Services
         {
             var json = JsonConvert.SerializeObject(bike);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var apiUrl = configuration.GetValue<string>("ApiUrl");
             await httpClient.PostAsync(apiUrl, content);
         }
 
         public async Task RemoveBike(int id)
         {
-            var apiUrl = configuration.GetValue<string>("ApiUrl");
             await httpClient.DeleteAsync(apiUrl + $"?id={id}");
         }
     }
