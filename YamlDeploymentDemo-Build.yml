@@ -6,15 +6,6 @@ trigger:
       exclude:
         - deploy/*
 
-resources:
-  pipelines:
-  - pipeline: DeploymentPipeline
-    source: YamlDeploymentDemo
-    trigger:
-      branches:
-        include:
-          - master
-
 variables:
   buildPlatform: "Any CPU"
   buildConfiguration: "release"
