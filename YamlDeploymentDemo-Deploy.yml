@@ -52,8 +52,6 @@ stages:
                     WebAppName: $(SiteName)-web
                     FunctionAppName: $(SiteName)-fn
                     ApiName: $(SiteName)-api
-                    JwtSigningKey: Qf47nscNoWPo5Qp****blabla****z6BNJKFRwEfRKxKZL #todo
-                    TokenExpiryInMinutes: 5
                     StolenBikeCheckFunctionInterval: 0 */5 * * * *
 
                     

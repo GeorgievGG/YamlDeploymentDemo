@@ -35,10 +35,6 @@ parameters:
     type: string
   - name: ApiName
     type: string
-  - name: JwtSigningKey
-    type: string
-  - name: TokenExpiryInMinutes
-    type: string
   - name: StolenBikeCheckFunctionInterval
     type: string
 
@@ -117,7 +113,7 @@ steps:
       AdditionalArguments: '/p:DropObjectsNotInSource=false /p:BlockOnPossibleDataLoss=false'
 
   - task: AzureCLI@2
-    displayName: 'Deploy Infrastructure'
+    displayName: 'Provision Infrastructure'
     inputs:
       azureSubscription: '$(AzureSubscription)'
       scriptType: pscore # PowerShell Core script
