@@ -44,7 +44,7 @@ stages:
             displayName: 'Execute tests'
             inputs:
               command: "test"
-              projects: "source/YamlDeploymentTests.csproj"
+              projects: "source/YamlDeploymentTests/YamlDeploymentTests.csproj"
               arguments: '--configuration $(buildConfiguration)'
 
           - task: CopyFiles@2
