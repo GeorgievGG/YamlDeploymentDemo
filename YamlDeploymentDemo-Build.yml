@@ -39,6 +39,13 @@ stages:
               msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\tmp"'
               platform: '$(BuildPlatform)'
               configuration: '$(BuildConfiguration)'
+              
+          - task: DotNetCoreCLI@2
+            displayName: 'Execute tests'
+            inputs:
+              command: "test"
+              projects: "source/YamlDeploymentTests.csproj"
+              arguments: '--configuration $(buildConfiguration)'
 
           - task: CopyFiles@2
             displayName: 'Copy database'
