@@ -19,13 +19,13 @@ namespace YamlDeploymentAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Bike>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await dbContext.Bikes.ToListAsync();
+            return Ok(await dbContext.Bikes.ToListAsync());
         }
 
         [HttpPost]
-        public async Task Post(Bike bike)
+        public async Task<IActionResult> Post(Bike bike)
         {
             var entity = await dbContext.Bikes.SingleOrDefaultAsync(x => x.Id == bike.Id);
             if (entity == null)
@@ -41,16 +41,20 @@ namespace YamlDeploymentAPI.Controllers
             }
 
             await dbContext.SaveChangesAsync();
+
+            return Ok();
         }
 
         [HttpDelete]
-        public async Task Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var entity = await dbContext.Bikes.SingleOrDefaultAsync(x => x.Id == id);
 
             dbContext.Bikes.Remove(entity);
 
             await dbContext.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
