@@ -18,7 +18,7 @@ namespace YamlDeploymentTests
             InMemoryContext.InsertBike(context, new Bike() { Id = 12, Name = "TestingBike", Available = true, Price = 12 });
 
             //act
-            var result = await controller.Get();
+            var result = await controller.Get(); 
 
             //assert
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
