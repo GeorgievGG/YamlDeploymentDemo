@@ -164,8 +164,6 @@ steps:
         az webapp config appsettings set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.ApiName }}" --settings `
           "APPINSIGHTS_INSTRUMENTATIONKEY=$iKey" `
           "ASPNETCORE_ENVIRONMENT=Development" `
-          "AdsConfigurationOptions:JwtSigningKey=${{ parameters.JwtSigningKey }}" `
-          "AdsConfigurationOptions:TokenExpiryInMinutes=${{ parameters.TokenExpiryInMinutes }}"
 
         az webapp config connection-string set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.ApiName }}" -t Custom --settings `
           "Db_Connection_String=$dbConnectionString" 
