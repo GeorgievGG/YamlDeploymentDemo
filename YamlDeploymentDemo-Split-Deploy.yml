@@ -75,6 +75,7 @@ stages:
   - stage: Deploy_DB
     dependsOn: 
       - Download_DB
+      - Provision_Common_Resources
     variables:
       ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
       EnvironmentName: YamlDeploymentEnv
@@ -88,6 +89,8 @@ stages:
           runOnce:
             deploy:
               steps:
+                - download: current
+                  artifact: database
                 - template: Templates/deploy-db.yml
                   parameters:
                     SqlServerAdminUser: $(SqlServerAdminUser)
