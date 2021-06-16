@@ -32,7 +32,7 @@ parameters:
 
 steps:
   - task: AzureCLI@2
-    displayName: 'Provision Infrastructure'
+    displayName: 'Setting configuration'
     inputs:
       azureSubscription: '$(AzureSubscription)'
       scriptType: pscore # PowerShell Core script

@@ -105,7 +105,7 @@ stages:
     jobs:
       - job: Settings_Configuration
         steps:
-          - template: Templates/settings-configuration.yml
+          - template: Templates/setting-configuration.yml
             parameters:
                 ResourceGroup: $(ResourceGroup)
                 Region: $(Region)
