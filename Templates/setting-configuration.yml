@@ -1,0 +1,75 @@
+parameters:
+  # NOTE: do not try to pass the azure subscription via parameters, it does not work 27/7/2020
+  - name: SkipAutoscale
+    type: boolean
+    default: false
+
+  # Required
+  - name: ResourceGroup
+    type: string
+  - name: Region
+    type: string
+  - name: SqlServerName
+    type: string
+  - name: SqlServerAdminUser
+    type: string
+  - name: SqlserverAdminPassword
+    type: string
+  - name: DbName
+    type: string
+  - name: ApplicationInsightsName
+    type: string
+  - name: StorageAccountName
+    type: string
+  - name: WebAppName
+    type: string
+  - name: FunctionAppName
+    type: string
+  - name: ApiName
+    type: string
+  - name: StolenBikeCheckFunctionInterval
+    type: string
+
+steps:
+  - task: AzureCLI@2
+    displayName: 'Provision Infrastructure'
+    inputs:
+      azureSubscription: '$(AzureSubscription)'
+      scriptType: pscore # PowerShell Core script
+      scriptLocation: inlineScript
+      inlineScript: |
+        function Test-Exit {
+            if ($lastexitcode -ne 0)
+            {
+                throw "AZ CLI Command failed, exit code: $lastexitcode"
+            }
+        }
+
+        Write-Host "Using ${{ parameters.ResourceGroup }}"
+        Write-Host "Using ${{ parameters.Region }}"
+
+        $iKey = az monitor app-insights component show -g ${{ parameters.ResourceGroup }} -a ${{ parameters.ApplicationInsightsName }} --query "instrumentationKey" --out tsv
+
+        Write-Host "Setting config strings"
+        $storageConnString = az storage account show-connection-string -g ${{ parameters.ResourceGroup }} -n ${{ parameters.StorageAccountName }} --query "connectionString" --out tsv         
+        $dbConnectionString = "Server=tcp:${{ parameters.SqlServerName }}.database.windows.net,1433;Initial Catalog=${{ parameters.DbName }};Persist Security Info=False;User ID=${{ parameters.SqlServerAdminUser }};Password=${{ parameters.SqlserverAdminPassword }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+
+        az webapp config appsettings set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.ApiName }}" --settings `
+          "APPINSIGHTS_INSTRUMENTATIONKEY=$iKey" `
+          "ASPNETCORE_ENVIRONMENT=Development" `
+
+        az webapp config connection-string set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.ApiName }}" -t Custom --settings `
+          "Db_Connection_String=$dbConnectionString" 
+          
+        az webapp config appsettings set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.ApiName }}" --settings `
+          "ASPNETCORE_ENVIRONMENT=Development"
+
+        az webapp config connection-string set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.WebAppName }}"-t Custom  --settings `
+          "ApiUrl=https://${{ parameters.ApiName }}.azurewebsites.net/bike"
+
+        az functionapp config appsettings set -n "${{ parameters.FunctionAppName }}" -g ${{ parameters.ResourceGroup }} --settings `
+          "AzureWebJobsStorage=$storageConnString" `
+          "Db_Connection_String=$dbConnectionString" `
+          "StolenBikeCheckFunctionInterval=${{ parameters.StolenBikeCheckFunctionInterval }}" `
+          "AzureFunctionsJobHost__logging__applicationInsights__samplingSettings__isEnabled=true" `
+          "AzureFunctionsJobHost__logging__logLevel__default=Error"

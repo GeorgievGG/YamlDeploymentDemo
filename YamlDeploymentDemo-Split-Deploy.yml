@@ -13,7 +13,7 @@ resources:
         - '*'
 
 variables:
-  - group: 'YamlDeploymentVarGrp' #variable group located in Library tab
+  - group: 'YamlDeploymentVarGrpSplit' #variable group located in Library tab
   - name: AzureSubscription
     value: 'Azure Personal Sub 2' #should match an AzureRM connection in DevOps
 
@@ -21,9 +21,6 @@ stages:
 
   - stage: Provision_Common_Resources
     dependsOn: []
-    variables:
-      ResourceGroup: YamlDeploymentDemoRG-Split #resource group in Azure
-      SiteName: yamldeploydemo
     jobs:
       - job: Provision_Common_Resources
         steps:
@@ -41,9 +38,7 @@ stages:
     dependsOn: 
       - Provision_Common_Resources
     variables:
-      ResourceGroup: YamlDeploymentDemoRG-Split #resource group in Azure
       EnvironmentName: YamlDeploymentEnv
-      SiteName: yamldeploydemo
     jobs:
       - deployment: Deploy_DB
         environment: ${{ variables.EnvironmentName }}
@@ -63,9 +58,6 @@ stages:
   - stage: Provision_Storage
     dependsOn: 
       - Provision_Common_Resources
-    variables:
-      ResourceGroup: YamlDeploymentDemoRG-Split #resource group in Azure
-      SiteName: yamldeploydemo
     jobs:
       - job: Provision_Storage
         steps:
@@ -78,9 +70,6 @@ stages:
   - stage: Provision_WebApps
     dependsOn: 
       - Provision_Common_Resources
-    variables:
-      ResourceGroup: YamlDeploymentDemoRG-Split #resource group in Azure
-      SiteName: yamldeploydemo
     jobs:
       - job: Provision_WebApps
         steps:
@@ -92,3 +81,41 @@ stages:
               WebServerFarmName: $(WebServerFarmName)
               WebAppName: $(SiteName)-web
               ApiName: $(SiteName)-api
+              
+  - stage: Provision_FunctionApp
+    dependsOn: 
+      - Provision_Common_Resources
+    jobs:
+      - job: Provision_FunctionApp
+        steps:
+          - template: Templates/provision-function-app.yml
+            parameters:
+              ResourceGroup: $(ResourceGroup)
+              Region: $(Region)
+              WebServerFarmName: $(WebServerFarmName)
+              ApplicationInsightsName: $(SiteName)-appinsights
+              StorageAccountName: $(SiteName)storage
+              FunctionAppName: $(SiteName)-fn
+              
+  - stage: Settings_Configuration
+    dependsOn: 
+      - Provision_Storage
+      - Provision_WebApps
+      - Provision_FunctionApp
+    jobs:
+      - job: Settings_Configuration
+        steps:
+          - template: Templates/settings-configuration.yml
+            parameters:
+                ResourceGroup: $(ResourceGroup)
+                Region: $(Region)
+                SqlServerName: $(SqlServerName)
+                SqlServerAdminUser: $(SqlServerAdminUser)
+                SqlserverAdminPassword: $(SqlserverAdminPassword)
+                DbName: ydd-db
+                ApplicationInsightsName: $(SiteName)-appinsights
+                StorageAccountName: $(SiteName)storage
+                WebAppName: $(SiteName)-web
+                FunctionAppName: $(SiteName)-fn
+                ApiName: $(SiteName)-api
+                StolenBikeCheckFunctionInterval: 0 */5 * * * *

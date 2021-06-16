@@ -48,7 +48,7 @@ steps:
         
         az extension add -n application-insights ; Test-Exit # This is a fail early function
         
-        $insightsCheck = az monitor app-insights component show -g YamlDeploymentDemoRG --query "[?name=='${{ parameters.ApplicationInsightsName }}']" | ConvertFrom-Json
+        $insightsCheck = az monitor app-insights component show -g ${{ parameters.ResourceGroup }} --query "[?name=='${{ parameters.ApplicationInsightsName }}']" | ConvertFrom-Json
         $insightsExists = $insightsCheck.Length -gt 0
         if (!$insightsExists) {
             az monitor app-insights component create --app ${{ parameters.ApplicationInsightsName }} --location "${{ parameters.Region }}" -g ${{ parameters.ResourceGroup }} 

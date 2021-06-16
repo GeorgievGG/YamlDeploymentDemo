@@ -21,9 +21,7 @@ stages:
   - stage: Deploy_All
     dependsOn: []
     variables:
-      ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
       EnvironmentName: YamlDeploymentEnv
-      SiteName: yamldeploydemo
     jobs:
       - deployment: YDD_Full_Deploy
         environment: ${{ variables.EnvironmentName }}
