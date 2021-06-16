@@ -112,29 +112,24 @@ stages:
               ApplicationInsightsName: $(SiteName)-appinsights
               StorageAccountName: $(SiteName)strgspl
               FunctionAppName: $(SiteName)-fn
-              
-  - stage: Settings_Configuration
+
+  - stage: Deploy_Functions
     dependsOn: 
-      - Provision_Storage
-      - Provision_WebApps
       - Provision_FunctionApp
+    variables:
+      EnvironmentName: YamlDeploymentApproved
     jobs:
-      - job: Settings_Configuration
-        steps:
-          - template: Templates/setting-configuration.yml
-            parameters:
-                ResourceGroup: $(ResourceGroup)
-                Region: $(Region)
-                SqlServerName: $(SqlServerName)
-                SqlServerAdminUser: $(SqlServerAdminUser)
-                SqlserverAdminPassword: $(SqlserverAdminPassword)
-                DbName: ydd-db-split
-                ApplicationInsightsName: $(SiteName)-appinsights
-                StorageAccountName: $(SiteName)strgspl
-                WebAppName: $(SiteName)-web
-                FunctionAppName: $(SiteName)-fn
-                ApiName: $(SiteName)-api
-                StolenBikeCheckFunctionInterval: 0 */5 * * * *
+      - deployment: Deploy_Functions
+        environment: ${{ variables.EnvironmentName }}
+        pool:
+          vmImage: 'windows-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Templates/deploy-functions.yml
+                  parameters:
+                    FunctionAppName: $(SiteName)-fn
 
   - stage: Deploy_API
     dependsOn: 
@@ -171,21 +166,26 @@ stages:
                 - template: Templates/deploy-web.yml
                   parameters:
                     WebAppName: $(SiteName)-web
-
-  - stage: Deploy_Functions
+              
+  - stage: Settings_Configuration
     dependsOn: 
+      - Provision_Storage
+      - Provision_WebApps
       - Provision_FunctionApp
-    variables:
-      EnvironmentName: YamlDeploymentApproved
     jobs:
-      - deployment: Deploy_Functions
-        environment: ${{ variables.EnvironmentName }}
-        pool:
-          vmImage: 'windows-latest'
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Templates/deploy-functions.yml
-                  parameters:
-                    FunctionAppName: $(SiteName)-fn
+      - job: Settings_Configuration
+        steps:
+          - template: Templates/setting-configuration.yml
+            parameters:
+                ResourceGroup: $(ResourceGroup)
+                Region: $(Region)
+                SqlServerName: $(SqlServerName)
+                SqlServerAdminUser: $(SqlServerAdminUser)
+                SqlserverAdminPassword: $(SqlserverAdminPassword)
+                DbName: ydd-db-split
+                ApplicationInsightsName: $(SiteName)-appinsights
+                StorageAccountName: $(SiteName)strgspl
+                WebAppName: $(SiteName)-web
+                FunctionAppName: $(SiteName)-fn
+                ApiName: $(SiteName)-api
+                StolenBikeCheckFunctionInterval: 0 */5 * * * *
