@@ -1,0 +1,50 @@
+trigger: none
+
+pool:
+    vmImage: "windows-latest"
+
+resources:
+  pipelines:
+    - pipeline: YDD
+      source: 'Build-YamlDeploymentDemo' #matches the build pipeline in DevOps
+      branch: master
+      trigger:
+        branches:
+        - '*'
+
+variables:
+  - group: 'YamlDeploymentVarGrp' #variable group located in Library tab
+  - name: AzureSubscription
+    value: 'Azure Personal Sub' #should match an AzureRM connection in DevOps
+
+stages:
+  - stage: Download_All
+    dependsOn: []
+    variables:
+      EnvironmentName: YamlDeploymentEnv
+    jobs:
+      - deployment: YDD_Full_Deploy
+        environment: ${{ variables.EnvironmentName }}
+        pool:
+          vmImage: 'windows-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: YDD
+                  displayName: 'Download databases'
+                  artifact: database
+                
+                - download: YDD
+                  displayName: 'Download API'
+                  artifact: api
+                
+                - download: YDD
+                  displayName: 'Download Functions'
+                  artifact: functions
+                
+                - download: YDD
+                  displayName: 'Download Webapp'
+                  artifact: web
+
+                    
