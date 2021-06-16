@@ -128,7 +128,7 @@ stages:
                 SqlServerName: $(SqlServerName)
                 SqlServerAdminUser: $(SqlServerAdminUser)
                 SqlserverAdminPassword: $(SqlserverAdminPassword)
-                DbName: ydd-db
+                DbName: ydd-db-split
                 ApplicationInsightsName: $(SiteName)-appinsights
                 StorageAccountName: $(SiteName)storage
                 WebAppName: $(SiteName)-web
