@@ -12,6 +12,9 @@ parameters:
     type: string
 
 steps:    
+  - download: YDD
+    displayName: 'Download databases'
+    artifact: database
   - task: SqlAzureDacpacDeployment@1
     displayName: 'Deploy Schema'
     inputs:
