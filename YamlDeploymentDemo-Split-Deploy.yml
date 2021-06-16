@@ -54,19 +54,27 @@ stages:
             displayName: 'Download Webapp'
             artifact: web
 
-  - template: Templates/provision-common-resources.yml
+  - stage: Provision_Common_Resources
     dependsOn: []
     variables:
-        ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
-        EnvironmentName: YamlDeploymentEnv
-        SiteName: yamldeploydemo
-    parameters:
-      ResourceGroup: $(ResourceGroup)
-      Region: $(Region)
-      SqlServerName: $(SqlServerName)
-      SqlServerAdminUser: $(SqlServerAdminUser)
-      SqlserverAdminPassword: $(SqlserverAdminPassword)
-      WebServerFarmName: $(WebServerFarmName)
-      ApplicationInsightsName: $(SiteName)-appinsights
-                
-                    
+      ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
+      EnvironmentName: YamlDeploymentEnv
+      SiteName: yamldeploydemo
+    jobs:
+      - job: Provision_Common_Resources
+        environment: ${{ variables.EnvironmentName }}
+        pool:
+          vmImage: 'windows-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Templates/provision-common-resources.yml
+                  parameters:
+                    ResourceGroup: $(ResourceGroup)
+                    Region: $(Region)
+                    SqlServerName: $(SqlServerName)
+                    SqlServerAdminUser: $(SqlServerAdminUser)
+                    SqlserverAdminPassword: $(SqlserverAdminPassword)
+                    WebServerFarmName: $(WebServerFarmName)
+                    ApplicationInsightsName: $(SiteName)-appinsights
