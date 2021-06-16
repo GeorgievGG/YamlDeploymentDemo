@@ -18,25 +18,44 @@ variables:
     value: 'Azure Personal Sub' #should match an AzureRM connection in DevOps
 
 stages:
-  - stage: Download_All
+  - stage: Download_DB
     dependsOn: []
-    variables:
-      EnvironmentName: YamlDeploymentEnv
     jobs:
-      - job: Download_All
+      - job: Download_DB
         steps:
           - download: YDD
             displayName: 'Download databases'
             artifact: database
-          
+
+stages:
+  - stage: Download_API
+    dependsOn: []
+    jobs:
+      - job: Download_API
+        steps:
           - download: YDD
             displayName: 'Download API'
             artifact: api
-          
+
+stages:
+  - stage: Download_Functions
+    dependsOn: []
+    jobs:
+      - job: Download_Functions
+        steps:
           - download: YDD
             displayName: 'Download Functions'
             artifact: functions
-          
+
+stages:
+  - stage: Download_Web
+    dependsOn: []
+    jobs:
+      - job: Download_Web
+        steps:
+          - download: YDD
+            displayName: 'Download databases'
+            artifact: database
           - download: YDD
             displayName: 'Download Webapp'
             artifact: web
