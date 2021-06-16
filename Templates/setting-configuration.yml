@@ -47,6 +47,8 @@ steps:
 
         Write-Host "Using ${{ parameters.ResourceGroup }}"
         Write-Host "Using ${{ parameters.Region }}"
+        
+        az extension add -n application-insights ; Test-Exit # This is a fail early function
 
         $iKey = az monitor app-insights component show -g ${{ parameters.ResourceGroup }} -a ${{ parameters.ApplicationInsightsName }} --query "instrumentationKey" --out tsv
 
@@ -64,7 +66,7 @@ steps:
         az webapp config appsettings set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.ApiName }}" --settings `
           "ASPNETCORE_ENVIRONMENT=Development"
 
-        az webapp config connection-string set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.WebAppName }}"-t Custom  --settings `
+        az webapp config connection-string set -g ${{ parameters.ResourceGroup }} -n "${{ parameters.WebAppName }}" -t Custom  --settings `
           "ApiUrl=https://${{ parameters.ApiName }}.azurewebsites.net/bike"
 
         az functionapp config appsettings set -n "${{ parameters.FunctionAppName }}" -g ${{ parameters.ResourceGroup }} --settings `

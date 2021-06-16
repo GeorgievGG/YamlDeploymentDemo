@@ -36,6 +36,8 @@ steps:
         Write-Host "Using ${{ parameters.ResourceGroup }}"
         Write-Host "Using ${{ parameters.Region }}"
         
+        az extension add -n application-insights ; Test-Exit # This is a fail early function
+        
         $appServicePlanId = az appservice plan show -n ${{ parameters.WebServerFarmName }} -g ${{ parameters.ResourceGroup }} --query "id" -o tsv
         $iKey = az monitor app-insights component show -g ${{ parameters.ResourceGroup }} -a ${{ parameters.ApplicationInsightsName }} --query "instrumentationKey" --out tsv
 
