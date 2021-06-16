@@ -1,0 +1,49 @@
+parameters:
+  # NOTE: do not try to pass the azure subscription via parameters, it does not work 27/7/2020
+
+  # Required
+  - name: ResourceGroup
+    type: string
+  - name: Region
+    type: string
+  - name: SqlServerName
+    type: string
+  - name: WebServerFarmName
+    type: string
+  - name: WebAppName
+    type: string
+  - name: ApiName
+    type: string
+
+steps:
+  - task: AzureCLI@2
+    displayName: 'Provision Webapps'
+    inputs:
+      azureSubscription: '$(AzureSubscription)'
+      scriptType: pscore # PowerShell Core script
+      scriptLocation: inlineScript
+      inlineScript: |
+        function Test-Exit {
+            if ($lastexitcode -ne 0)
+            {
+                throw "AZ CLI Command failed, exit code: $lastexitcode"
+            }
+        }
+
+        Write-Host "Using ${{ parameters.ResourceGroup }}"
+        Write-Host "Using ${{ parameters.Region }}"
+        
+        $appServicePlanId = az appservice plan show -n ${{ parameters.WebServerFarmName }} -g ${{ parameters.ResourceGroup }} --query "id" -o tsv
+
+        Write-Host "Creating API WebApp"
+        az webapp create -n "${{ parameters.ApiName }}" -p $appServicePlanId -g ${{ parameters.ResourceGroup }} | Out-Null ; Test-Exit
+        
+        Write-Host "Adding firewall rules for SQL Server"
+        $apiOutboundIps = (az webapp show --resource-group ${{ parameters.ResourceGroup }} --name ${{ parameters.ApiName }} --query possibleOutboundIpAddresses | ConvertFrom-Json).Split(",")
+        
+        foreach ($ip in $apiOutboundIps) {
+            az sql server firewall-rule create --end-ip-address $ip --name $ip --resource-group ${{ parameters.ResourceGroup }} --server ${{ parameters.SqlServerName }} --start-ip-address $ip
+        }
+
+        Write-Host "Creating WebApp"
+        az webapp create -n "${{ parameters.WebAppName }}" -p $appServicePlanId -g ${{ parameters.ResourceGroup }} | Out-Null ; Test-Exit

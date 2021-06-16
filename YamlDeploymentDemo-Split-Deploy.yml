@@ -22,7 +22,7 @@ stages:
   - stage: Provision_Common_Resources
     dependsOn: []
     variables:
-      ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
+      ResourceGroup: YamlDeploymentDemoRG-Split #resource group in Azure
       SiteName: yamldeploydemo
     jobs:
       - job: Provision_Common_Resources
@@ -64,7 +64,7 @@ stages:
     dependsOn: 
       - Provision_Common_Resources
     variables:
-      ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
+      ResourceGroup: YamlDeploymentDemoRG-Split #resource group in Azure
       SiteName: yamldeploydemo
     jobs:
       - job: Provision_Common_Resources
@@ -74,3 +74,21 @@ stages:
               ResourceGroup: $(ResourceGroup)
               Region: $(Region)
               StorageAccountName: $(SiteName)storage
+              
+  - stage: Provision_WebApps
+    dependsOn: 
+      - Provision_Common_Resources
+    variables:
+      ResourceGroup: YamlDeploymentDemoRG-Split #resource group in Azure
+      SiteName: yamldeploydemo
+    jobs:
+      - job: Provision_WebApps
+        steps:
+          - template: Templates/provision-webapps.yml
+            parameters:
+              ResourceGroup: $(ResourceGroup)
+              Region: $(Region)
+              SqlServerName: $(SqlServerName)
+              WebServerFarmName: $(WebServerFarmName)
+              WebAppName: $(SiteName)-web
+              ApiName: $(SiteName)-api
