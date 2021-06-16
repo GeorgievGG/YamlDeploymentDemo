@@ -69,7 +69,7 @@ stages:
     jobs:
       - job: Provision_Common_Resources
         steps:
-          - template: Templates/provision-common-resources.yml
+          - template: Templates/provision-storage.yml
             parameters:
               ResourceGroup: $(ResourceGroup)
               Region: $(Region)
