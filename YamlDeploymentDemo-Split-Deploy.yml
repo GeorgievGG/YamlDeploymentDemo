@@ -58,23 +58,16 @@ stages:
     dependsOn: []
     variables:
       ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
-      EnvironmentName: YamlDeploymentEnv
       SiteName: yamldeploydemo
     jobs:
       - job: Provision_Common_Resources
-        environment: ${{ variables.EnvironmentName }}
-        pool:
-          vmImage: 'windows-latest'
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Templates/provision-common-resources.yml
-                  parameters:
-                    ResourceGroup: $(ResourceGroup)
-                    Region: $(Region)
-                    SqlServerName: $(SqlServerName)
-                    SqlServerAdminUser: $(SqlServerAdminUser)
-                    SqlserverAdminPassword: $(SqlserverAdminPassword)
-                    WebServerFarmName: $(WebServerFarmName)
-                    ApplicationInsightsName: $(SiteName)-appinsights
+        steps:
+          - template: Templates/provision-common-resources.yml
+            parameters:
+              ResourceGroup: $(ResourceGroup)
+              Region: $(Region)
+              SqlServerName: $(SqlServerName)
+              SqlServerAdminUser: $(SqlServerAdminUser)
+              SqlserverAdminPassword: $(SqlserverAdminPassword)
+              WebServerFarmName: $(WebServerFarmName)
+              ApplicationInsightsName: $(SiteName)-appinsights
