@@ -1,0 +1,45 @@
+parameters:
+  # NOTE: do not try to pass the azure subscription via parameters, it does not work 27/7/2020
+  - name: SkipAutoscale
+    type: boolean
+    default: false
+
+  # Required
+  - name: ResourceGroup
+    type: string
+  - name: Region
+    type: string
+  - name: WebServerFarmName
+    type: string
+  - name: ApplicationInsightsName
+    type: string
+  - name: StorageAccountName
+    type: string
+  - name: FunctionAppName
+    type: string
+
+steps:
+  - task: AzureCLI@2
+    displayName: 'Provision Function App'
+    inputs:
+      azureSubscription: '$(AzureSubscription)'
+      scriptType: pscore # PowerShell Core script
+      scriptLocation: inlineScript
+      inlineScript: |
+        function Test-Exit {
+            if ($lastexitcode -ne 0)
+            {
+                throw "AZ CLI Command failed, exit code: $lastexitcode"
+            }
+        }
+
+        Write-Host "Using ${{ parameters.ResourceGroup }}"
+        Write-Host "Using ${{ parameters.Region }}"
+        
+        $appServicePlanId = az appservice plan show -n ${{ parameters.WebServerFarmName }} -g ${{ parameters.ResourceGroup }} --query "id" -o tsv
+        $iKey = az monitor app-insights component show -g ${{ parameters.ResourceGroup }} -a ${{ parameters.ApplicationInsightsName }} --query "instrumentationKey" --out tsv
+
+        Write-Host "Creating functionapp"
+        az functionapp create `
+          -n "${{ parameters.FunctionAppName }}" -s "${{ parameters.StorageAccountName }}" -p $appServicePlanId -g ${{ parameters.ResourceGroup }} `
+          --app-insights-key $iKey --functions-version 3 | Out-Null ; Test-Exit
