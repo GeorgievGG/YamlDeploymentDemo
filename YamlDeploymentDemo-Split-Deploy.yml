@@ -23,28 +23,21 @@ stages:
     variables:
       EnvironmentName: YamlDeploymentEnv
     jobs:
-      - deployment: YDD_Full_Deploy
-        environment: ${{ variables.EnvironmentName }}
-        pool:
-          vmImage: 'windows-latest'
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - download: YDD
-                  displayName: 'Download databases'
-                  artifact: database
-                
-                - download: YDD
-                  displayName: 'Download API'
-                  artifact: api
-                
-                - download: YDD
-                  displayName: 'Download Functions'
-                  artifact: functions
-                
-                - download: YDD
-                  displayName: 'Download Webapp'
-                  artifact: web
+        steps:
+          - download: YDD
+            displayName: 'Download databases'
+            artifact: database
+          
+          - download: YDD
+            displayName: 'Download API'
+            artifact: api
+          
+          - download: YDD
+            displayName: 'Download Functions'
+            artifact: functions
+          
+          - download: YDD
+            displayName: 'Download Webapp'
+            artifact: web
 
                     
