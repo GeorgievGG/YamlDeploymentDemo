@@ -26,8 +26,7 @@ stages:
           - download: YDD
             displayName: 'Download databases'
             artifact: database
-
-stages:
+            
   - stage: Download_API
     dependsOn: []
     jobs:
@@ -36,8 +35,7 @@ stages:
           - download: YDD
             displayName: 'Download API'
             artifact: api
-
-stages:
+            
   - stage: Download_Functions
     dependsOn: []
     jobs:
@@ -47,7 +45,6 @@ stages:
             displayName: 'Download Functions'
             artifact: functions
 
-stages:
   - stage: Download_Web
     dependsOn: []
     jobs:
