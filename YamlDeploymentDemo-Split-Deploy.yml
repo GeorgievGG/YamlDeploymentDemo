@@ -71,3 +71,26 @@ stages:
               SqlserverAdminPassword: $(SqlserverAdminPassword)
               WebServerFarmName: $(WebServerFarmName)
               ApplicationInsightsName: $(SiteName)-appinsights
+
+  - stage: Deploy_DB
+    dependsOn: 
+      - Download_DB
+    variables:
+      ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
+      EnvironmentName: YamlDeploymentEnv
+      SiteName: yamldeploydemo
+    jobs:
+      - deployment: Deploy_DB
+        environment: ${{ variables.EnvironmentName }}
+        pool:
+          vmImage: 'windows-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Templates/deploy-db.yml
+                  parameters:
+                    SqlServerAdminUser: $(SqlServerAdminUser)
+                    SqlserverAdminPassword: $(SqlserverAdminPassword)
+                    SqlServerNameFqdn: $(SqlServerNameFqdn)
+                    DbName: ydd-db

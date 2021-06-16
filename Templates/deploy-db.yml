@@ -1,0 +1,24 @@
+parameters:
+  # NOTE: do not try to pass the azure subscription via parameters, it does not work 27/7/2020
+
+  # Required
+  - name: SqlServerAdminUser
+    type: string
+  - name: SqlserverAdminPassword
+    type: string
+  - name: SqlServerNameFqdn
+    type: string
+  - name: DbName
+    type: string
+
+steps:    
+  - task: SqlAzureDacpacDeployment@1
+    displayName: 'Deploy Schema'
+    inputs:
+      azureSubscription: '$(AzureSubscription)'
+      ServerName: '${{ parameters.SqlServerNameFqdn }}'
+      DatabaseName: '${{ parameters.DbName }}'
+      SqlUsername: '${{ parameters.SqlServerAdminUser }}'
+      SqlPassword: '${{ parameters.SqlserverAdminPassword }}'
+      DacpacFile: '$(Pipeline.Workspace)/YDD/database/YamlDeploymentDB.dacpac'
+      AdditionalArguments: '/p:DropObjectsNotInSource=false /p:BlockOnPossibleDataLoss=false'
