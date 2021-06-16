@@ -35,6 +35,8 @@ steps:
         Write-Host "Using ${{ parameters.ResourceGroup }}"
         Write-Host "Using ${{ parameters.Region }}"
         
+        az group create --location "${{ parameters.Region }}" --name "${{ parameters.ResourceGroup }}"
+        
         $sqlServerCheck = az sql server list --query "[?name=='${{ parameters.SqlServerName }}']" | ConvertFrom-Json
         $serverExists = $sqlServerCheck.Length -gt 0
         if (!$serverExists) {

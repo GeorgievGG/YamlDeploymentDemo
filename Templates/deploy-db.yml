@@ -13,7 +13,7 @@ parameters:
 
 steps:    
   - download: YDD
-    displayName: 'Download databases'
+    displayName: 'Download DB artifact'
     artifact: database
   - task: SqlAzureDacpacDeployment@1
     displayName: 'Deploy Schema'

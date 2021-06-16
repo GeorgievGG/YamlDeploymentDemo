@@ -1,0 +1,33 @@
+parameters:
+  # NOTE: do not try to pass the azure subscription via parameters, it does not work 27/7/2020
+
+  # Required
+  - name: ResourceGroup
+    type: string
+  - name: Region
+    type: string
+  - name: StorageAccountName
+    type: string
+
+steps:
+  - task: AzureCLI@2
+    displayName: 'Provision Infrastructure'
+    inputs:
+      azureSubscription: '$(AzureSubscription)'
+      scriptType: pscore # PowerShell Core script
+      scriptLocation: inlineScript
+      inlineScript: |
+        function Test-Exit {
+            if ($lastexitcode -ne 0)
+            {
+                throw "AZ CLI Command failed, exit code: $lastexitcode"
+            }
+        }
+
+        Write-Host "Using ${{ parameters.ResourceGroup }}"
+        Write-Host "Using ${{ parameters.Region }}"
+
+        Write-Host "Creating storage account"
+        az storage account create `
+          -n "${{ parameters.StorageAccountName }}" -g ${{ parameters.ResourceGroup }} -l "${{ parameters.Region }}" `
+          --encryption-services blob | Out-Null ; Test-Exit

@@ -41,7 +41,7 @@ stages:
     dependsOn: 
       - Provision_Common_Resources
     variables:
-      ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
+      ResourceGroup: YamlDeploymentDemoRG-Split #resource group in Azure
       EnvironmentName: YamlDeploymentEnv
       SiteName: yamldeploydemo
     jobs:
@@ -59,3 +59,18 @@ stages:
                     SqlserverAdminPassword: $(SqlserverAdminPassword)
                     SqlServerNameFqdn: $(SqlServerNameFqdn)
                     DbName: ydd-db
+                    
+  - stage: Provision_Storage
+    dependsOn: 
+      - Provision_Common_Resources
+    variables:
+      ResourceGroup: YamlDeploymentDemoRG #resource group in Azure
+      SiteName: yamldeploydemo
+    jobs:
+      - job: Provision_Common_Resources
+        steps:
+          - template: Templates/provision-common-resources.yml
+            parameters:
+              ResourceGroup: $(ResourceGroup)
+              Region: $(Region)
+              StorageAccountName: $(SiteName)storage
