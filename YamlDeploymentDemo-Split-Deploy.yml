@@ -34,13 +34,13 @@ stages:
               WebServerFarmName: $(WebServerFarmName)
               ApplicationInsightsName: $(SiteName)-appinsights
 
-  - stage: Deploy_DB
+  - stage: Deploy_DB_Schema
     dependsOn: 
       - Provision_Common_Resources
     variables:
       EnvironmentName: YamlDeploymentEnv
     jobs:
-      - deployment: Deploy_DB
+      - deployment: Deploy_DB_Schema
         environment: ${{ variables.EnvironmentName }}
         pool:
           vmImage: 'windows-latest'
@@ -119,3 +119,57 @@ stages:
                 FunctionAppName: $(SiteName)-fn
                 ApiName: $(SiteName)-api
                 StolenBikeCheckFunctionInterval: 0 */5 * * * *
+
+  - stage: Deploy_API
+    dependsOn: 
+      - Provision_Common_Resources
+    variables:
+      EnvironmentName: YamlDeploymentEnv
+    jobs:
+      - deployment: Deploy_API
+        environment: ${{ variables.EnvironmentName }}
+        pool:
+          vmImage: 'windows-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Templates/deploy-api.yml
+                  parameters:
+                    ApiName: $(SiteName)-api
+
+  - stage: Deploy_Web_App
+    dependsOn: 
+      - Provision_Common_Resources
+    variables:
+      EnvironmentName: YamlDeploymentEnv
+    jobs:
+      - deployment: Deploy_Web_App
+        environment: ${{ variables.EnvironmentName }}
+        pool:
+          vmImage: 'windows-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Templates/deploy-web.yml
+                  parameters:
+                    WebAppName: $(SiteName)-web
+
+  - stage: Deploy_Functions
+    dependsOn: 
+      - Provision_Common_Resources
+    variables:
+      EnvironmentName: YamlDeploymentEnv
+    jobs:
+      - deployment: Deploy_Functions
+        environment: ${{ variables.EnvironmentName }}
+        pool:
+          vmImage: 'windows-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Templates/deploy-functions.yml
+                  parameters:
+                    FunctionAppName: $(SiteName)-fn

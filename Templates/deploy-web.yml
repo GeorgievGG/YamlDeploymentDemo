@@ -1,0 +1,18 @@
+parameters:
+  # NOTE: do not try to pass the azure subscription via parameters, it does not work 27/7/2020
+
+  # Required
+  - name: WebAppName
+    type: string
+
+steps:
+  - download: YDD
+    displayName: 'Download web artifact'
+    artifact: web
+  - task: AzureRmWebAppDeployment@4
+    displayName: Deploy Webapp
+    inputs:
+      azureSubscription: $(AzureSubscription)
+      appType: 'webApp'
+      WebAppName: '${{ parameters.WebAppName }}'
+      package: '$(Pipeline.Workspace)/YDD/web/YamlDeploymentWeb.zip'

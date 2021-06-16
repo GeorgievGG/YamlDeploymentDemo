@@ -16,7 +16,7 @@ steps:
     displayName: 'Download DB artifact'
     artifact: database
   - task: SqlAzureDacpacDeployment@1
-    displayName: 'Deploy Schema'
+    displayName: 'Deploy DB Schema'
     inputs:
       azureSubscription: '$(AzureSubscription)'
       ServerName: '${{ parameters.SqlServerNameFqdn }}'
