@@ -57,7 +57,7 @@ steps:
             Write-Host "App Insights ${{ parameters.ApplicationInsightsName }} already exists!"
         }
         
-        $appServicePlanCheck = az appservice plan list --query "[?name=='${{ parameters.WebServerFarmName }}']" | ConvertFrom-Json
+        $appServicePlanCheck = az appservice plan list --resource-group ${{ parameters.ResourceGroup }} --query "[?name=='${{ parameters.WebServerFarmName }}']" | ConvertFrom-Json
         $appServicePlanExists = $appServicePlanCheck.Length -gt 0
         if (!$appServicePlanExists) {
             az appservice plan create --name ${{ parameters.WebServerFarmName }} --resource-group ${{ parameters.ResourceGroup }}
