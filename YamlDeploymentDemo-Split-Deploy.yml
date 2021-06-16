@@ -89,8 +89,7 @@ stages:
           runOnce:
             deploy:
               steps:
-                - download: current
-                  artifact: database
+                - download: none
                 - template: Templates/deploy-db.yml
                   parameters:
                     SqlServerAdminUser: $(SqlServerAdminUser)
