@@ -1,8 +1,5 @@
 parameters:
   # NOTE: do not try to pass the azure subscription via parameters, it does not work 27/7/2020
-  - name: SkipAutoscale
-    type: boolean
-    default: false
 
   # Required
   - name: ResourceGroup

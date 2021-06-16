@@ -1,0 +1,65 @@
+parameters:
+  # NOTE: do not try to pass the azure subscription via parameters, it does not work 27/7/2020
+
+  # Required
+  - name: ResourceGroup
+    type: string
+  - name: Region
+    type: string
+  - name: SqlServerName
+    type: string
+  - name: SqlServerAdminUser
+    type: string
+  - name: SqlserverAdminPassword
+    type: string
+  - name: WebServerFarmName
+    type: string
+  - name: ApplicationInsightsName
+    type: string
+
+steps:
+  - task: AzureCLI@2
+    displayName: 'Ensure common resources exist' # These are usually created separately from the deployment, that's why I separated them here
+    inputs:
+      azureSubscription: '$(AzureSubscription)'
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |    
+        function Test-Exit {
+            if ($lastexitcode -ne 0)
+            {
+                throw "AZ CLI Command failed, exit code: $lastexitcode"
+            }
+        }
+        
+        Write-Host "Using ${{ parameters.ResourceGroup }}"
+        Write-Host "Using ${{ parameters.Region }}"
+        
+        $sqlServerCheck = az sql server list --query "[?name=='${{ parameters.SqlServerName }}']" | ConvertFrom-Json
+        $serverExists = $sqlServerCheck.Length -gt 0
+        if (!$serverExists) {
+            az sql server create --name ${{ parameters.SqlServerName }} --resource-group ${{ parameters.ResourceGroup }} --location "${{ parameters.Region }}" --admin-user ${{ parameters.SqlServerAdminUser }} --admin-password ${{ parameters.SqlserverAdminPassword }}
+        }
+        else { 
+            Write-Host "SQL Server ${{ parameters.SqlServerName }} already exists!"
+        }
+        
+        az extension add -n application-insights ; Test-Exit # This is a fail early function
+        
+        $insightsCheck = az monitor app-insights component show -g YamlDeploymentDemoRG --query "[?name=='${{ parameters.ApplicationInsightsName }}']" | ConvertFrom-Json
+        $insightsExists = $insightsCheck.Length -gt 0
+        if (!$insightsExists) {
+            az monitor app-insights component create --app ${{ parameters.ApplicationInsightsName }} --location "${{ parameters.Region }}" -g ${{ parameters.ResourceGroup }} 
+        }
+        else { 
+            Write-Host "App Insights ${{ parameters.ApplicationInsightsName }} already exists!"
+        }
+        
+        $appServicePlanCheck = az appservice plan list --query "[?name=='${{ parameters.WebServerFarmName }}']" | ConvertFrom-Json
+        $appServicePlanExists = $appServicePlanCheck.Length -gt 0
+        if (!$appServicePlanExists) {
+            az appservice plan create --name ${{ parameters.WebServerFarmName }} --resource-group ${{ parameters.ResourceGroup }}
+        }
+        else { 
+            Write-Host "App Service Plan ${{ parameters.WebServerFarmName }} already exists!"
+        }
