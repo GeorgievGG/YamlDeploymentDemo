@@ -34,6 +34,8 @@ steps:
         Write-Host "Using ${{ parameters.Region }}"
         
         $appServicePlanId = az appservice plan show -n ${{ parameters.WebServerFarmName }} -g ${{ parameters.ResourceGroup }} --query "id" -o tsv
+        
+        Write-Host "Using app service plan: $appServicePlanId"
 
         Write-Host "Creating API WebApp"
         az webapp create -n "${{ parameters.ApiName }}" -p $appServicePlanId -g ${{ parameters.ResourceGroup }} | Out-Null ; Test-Exit
