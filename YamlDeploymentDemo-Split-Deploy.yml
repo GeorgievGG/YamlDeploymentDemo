@@ -23,6 +23,7 @@ stages:
     variables:
       EnvironmentName: YamlDeploymentEnv
     jobs:
+      - job: Download_All
         steps:
           - download: YDD
             displayName: 'Download databases'
