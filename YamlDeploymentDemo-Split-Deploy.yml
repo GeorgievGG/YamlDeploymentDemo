@@ -15,7 +15,7 @@ resources:
 variables:
   - group: 'YamlDeploymentVarGrp' #variable group located in Library tab
   - name: AzureSubscription
-    value: 'Azure Personal Sub' #should match an AzureRM connection in DevOps
+    value: 'Azure Personal Sub 2' #should match an AzureRM connection in DevOps
 
 stages:
 
@@ -67,7 +67,7 @@ stages:
       ResourceGroup: YamlDeploymentDemoRG-Split #resource group in Azure
       SiteName: yamldeploydemo
     jobs:
-      - job: Provision_Common_Resources
+      - job: Provision_Storage
         steps:
           - template: Templates/provision-storage.yml
             parameters:

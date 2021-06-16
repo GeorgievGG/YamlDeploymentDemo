@@ -15,7 +15,7 @@ resources:
 variables:
   - group: 'YamlDeploymentVarGrp' #variable group located in Library tab
   - name: AzureSubscription
-    value: 'Azure Personal Sub' #should match an AzureRM connection in DevOps
+    value: 'Azure Personal Sub 2' #should match an AzureRM connection in DevOps
 
 stages:
   - stage: Deploy_All
