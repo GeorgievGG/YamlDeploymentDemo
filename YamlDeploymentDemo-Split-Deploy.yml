@@ -19,8 +19,6 @@ variables:
 
 stages:
   - stage: ApprovalStage
-    dependsOn: 
-      - Provision_Common_Resources
     variables:
       EnvironmentName: YamlDeploymentPending
     jobs:
@@ -36,7 +34,8 @@ stages:
                 - bash: echo 'Fake deployment step to trigger approval'
 
   - stage: Provision_Common_Resources
-    dependsOn: []
+    dependsOn: 
+      - ApprovalStage
     jobs:
       - job: Provision_Common_Resources
         steps:
