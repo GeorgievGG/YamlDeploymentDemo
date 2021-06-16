@@ -21,7 +21,7 @@ stages:
   - stage: Deploy_All
     dependsOn: []
     variables:
-      EnvironmentName: YamlDeploymentEnv
+      EnvironmentName: YamlDeploymentPending
     jobs:
       - deployment: YDD_Full_Deploy
         environment: ${{ variables.EnvironmentName }}

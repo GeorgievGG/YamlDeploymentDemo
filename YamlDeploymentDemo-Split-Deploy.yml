@@ -18,6 +18,22 @@ variables:
     value: 'Azure Personal Sub 2' #should match an AzureRM connection in DevOps
 
 stages:
+  - stage: ApprovalStage
+    dependsOn: 
+      - Provision_Common_Resources
+    variables:
+      EnvironmentName: YamlDeploymentPending
+    jobs:
+      - deployment: ApprovalStage
+        environment: ${{ variables.EnvironmentName }}
+        pool:
+          vmImage: 'windows-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: none
+                - bash: echo 'Fake deployment step to trigger approval'
 
   - stage: Provision_Common_Resources
     dependsOn: []
@@ -38,7 +54,7 @@ stages:
     dependsOn: 
       - Provision_Common_Resources
     variables:
-      EnvironmentName: YamlDeploymentEnv
+      EnvironmentName: YamlDeploymentApproved
     jobs:
       - deployment: Deploy_DB_Schema
         environment: ${{ variables.EnvironmentName }}
@@ -125,7 +141,7 @@ stages:
     dependsOn: 
       - Provision_WebApps
     variables:
-      EnvironmentName: YamlDeploymentEnv
+      EnvironmentName: YamlDeploymentApproved
     jobs:
       - deployment: Deploy_API
         environment: ${{ variables.EnvironmentName }}
@@ -143,7 +159,7 @@ stages:
     dependsOn: 
       - Provision_WebApps
     variables:
-      EnvironmentName: YamlDeploymentEnv
+      EnvironmentName: YamlDeploymentApproved
     jobs:
       - deployment: Deploy_Web_App
         environment: ${{ variables.EnvironmentName }}
@@ -161,7 +177,7 @@ stages:
     dependsOn: 
       - Provision_FunctionApp
     variables:
-      EnvironmentName: YamlDeploymentEnv
+      EnvironmentName: YamlDeploymentApproved
     jobs:
       - deployment: Deploy_Functions
         environment: ${{ variables.EnvironmentName }}
