@@ -68,7 +68,7 @@ stages:
                     SqlServerAdminUser: $(SqlServerAdminUser)
                     SqlserverAdminPassword: $(SqlserverAdminPassword)
                     SqlServerNameFqdn: $(SqlServerNameFqdn)
-                    DbName: ydd-db
+                    DbName: ydd-db-split
                     
   - stage: Provision_Storage
     dependsOn: 
