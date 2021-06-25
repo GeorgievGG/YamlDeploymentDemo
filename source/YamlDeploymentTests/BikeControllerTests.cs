@@ -24,18 +24,18 @@ namespace YamlDeploymentTests
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
 
-        //[TestMethod]
-        //public async Task Post_InvalidId_Returns400()
-        //{
-        //    var context = InMemoryContext.GetContext();
-        //    var controller = new BikeController(context);
-        //    var newBike = new Bike() { Id = -1, Name = "IllegalBike", Available = false, Price = -190 };
+        [TestMethod]
+        public async Task Post_InvalidId_Returns400()
+        {
+            var context = InMemoryContext.GetContext();
+            var controller = new BikeController(context);
+            var newBike = new Bike() { Id = -1, Name = "IllegalBike", Available = false, Price = -190 };
 
-        //    //act
-        //    var result = await controller.Post(newBike);
+            //act
+            var result = await controller.Post(newBike);
 
-        //    //assert
-        //    Assert.IsInstanceOfType(result, typeof(BadRequestResult));
-        //}
+            //assert
+            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+        }
     }
 }

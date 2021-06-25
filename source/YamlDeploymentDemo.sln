@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YamlDeploymentDomain", "Yam
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YamlDeploymentWeb", "YamlDeploymentWeb\YamlDeploymentWeb.csproj", "{29455D19-8E21-4DCB-B80B-97FB54FB4E90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YamlDeploymentTests", "YamlDeploymentTests\YamlDeploymentTests.csproj", "{386E9AC8-2410-48C9-9FA5-B1FF04890B45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YamlDeploymentTests", "YamlDeploymentTests\YamlDeploymentTests.csproj", "{386E9AC8-2410-48C9-9FA5-B1FF04890B45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
